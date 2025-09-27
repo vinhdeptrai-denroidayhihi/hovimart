@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Quản lý sản phẩm</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/laptop.css">
+    <link rel="stylesheet" href="/css/ipad.css">
+    <link rel="stylesheet" href="/css/mobile.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
+
+    <style>
+        .padding {
+            padding-bottom: 2px;
+        }
+
+        .fontSize {
+            font-size: 15px;
+        }
+
+        .targetSupplier {
+            background-color: #EB8D2C;
+        }
+
+        .colorMain {
+            color: #EB8D2C;
+        }
+
+        .targetSupplier:hover {
+            background-color: rgba(235, 141, 44, .7);
+        }
+
+        .hoverBtn:hover {
+            background-color: rgb(255, 146, 37) !important;
+        }
+
+        .parents-btn_select {
+            position: relative;
+        }
+
+        .border_line {
+            position: absolute;
+            bottom: 0px;
+            height: 3px;
+            background-color: #EB8D2C;
+            border-radius: 50px;
+            z-index: 999;
+        }
+
+        .setImage {
+            padding: 80px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .title {
+            height: 40px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .inputBorder {
+            transition: all .2s ease-in-out;
+            border: 1px solid #999;
+            outline: none;
+        }
+
+        .inputBorder:hover {
+            border-color: rgba(235, 141, 44, .5);
+        }
+
+        .inputBorder:focus {
+            border-color: #EB8D2C;
+        }
+
+        .ck-editor__editable[role="textbox"] {
+            min-height: 500px;
+        }
+    </style>
+
+</head>
+
+<body style="background-color: #EB8D2C; padding-left: 116px;">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("menuSupplier.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("main_menu").innerHTML = data;
+                    document.getElementById("main_menu").classList.add("loaded");
+                    const currentPath = window.location.pathname;
+                    document.querySelectorAll("#main_menu-child .nav-item a").forEach(link => {
+                        if (currentPath.includes(link.getAttribute("href"))) {
+                            link.parentElement.classList.add("active");
+                        }
+                    });
+                })
+                .catch(error => console.error("Lỗi tải menu:", error))
+        });
+    </script>
+    <section>
+
+    </section>
+    <header class="transition" id="parentMenu">
+        <nav class="h-100" id="main_menu">
+
+        </nav>
+    </header>
+    <main class="container position-relative" id="main_layout" style="min-height: 100vh;">
+        <section class="listInfo">
+            <section class="d-flex justify-content-between pt-3 pb-3">
+                <form action="" method="post" class="flex-fill d-flex align-items-center me-md-5">
+                    <div class="row row-cols-lg-4 row-cols-sm-1 w-100 d-flex justify-content-center justify-content-md-start ms-md-1"
+                        id="menu_search">
+                        <div class="col mb-2 px-0 px-md-1 ms-lg-1" style="flex: 0;">
+                            <input type="text" class="rounded-5 padding px-2 border-0 bg-white" name="searchID"
+                                id="searchID" placeholder="Tìm kiếm theo mã">
+                        </div>
+                        <div class="col mb-2 px-0 px-md-1" style="flex: 0;">
+                            <input type="text" class="rounded-5 padding px-2 border-0 bg-white" name="searchNameBrand"
+                                id="searchNameBrand" placeholder="Tìm kiếm theo tên">
+                        </div>
+                        <div class="col mb-2 px-0 px-md-1" style="flex: 0;">
+                            <select class="pe-2 rounded-5 padding px-2 border-0 bg-white" name="searchStatus"
+                                id="searchStatus">
+                                <option value="">Tìm theo trạng thái</option>
+                                <option value="hoatdong">Hoạt động</option>
+                                <option value="ngung">Ngưng hoạt động</option>
+                            </select>
+                        </div>
+                        <div class="col ms-lg-1 my-lg-0 px-0 px-lg-1" style="flex: 0; font-size: 15px;">
+                            <button type="submit" class="rounded-5 border-0 padding px-3 text-white transition pb-1"
+                                id="menu_search-submit">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="row row-cols-1 row-cols-lg-2 flex-lg-row m-0 my-auto" id="addAndExcel">
+                    <div class="col mb-2 marginAuto px-0 px-md-2 d-flex justify-content-end">
+                        <div class="d-flex justify-content-center align-items-center bg-white rounded-5 idData w-100"
+                            style="min-width: 155px; cursor: pointer;">
+                            <p class="mb-0 me-1">Thêm sản phẩm</p><ion-icon name="add-outline"></ion-icon>
+                        </div>
+                    </div>
+                    <div class="col mb-2 mt-2 mt-md-0 marginAuto px-0 px-md-2 d-flex justify-content-end">
+                        <div class="d-flex justify-content-center align-items-center bg-white rounded-5 excel w-100"
+                            style="min-width: 155px;">
+                            <p class="mb-0 me-2">Xuất Excel</p><ion-icon name="document-text-outline"></ion-icon>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="d-flex bg-white mb-2 rounded-2 parents-btn_select">
+                    <span class="border_line transitionButton"></span>
+                    <div class="ms-2 py-1 px-4 btn_select position-relative transition d-flex align-items-center"
+                        style="cursor: pointer;">
+                        <ion-icon name="menu-outline" style="font-size: 22px;"></ion-icon>
+                    </div>
+                    <div class="py-1 px-4 btn_select position-relative transition d-flex align-items-center"
+                        style="cursor: pointer;">
+                        <ion-icon name="apps-outline"></ion-icon>
+                    </div>
+                </div>
+                <div class="bg-white border scroll overflow-x-scroll mb-3 d-flex position-relative"
+                    style="height: 90vh;" id="backgroudParentItem">
+                    <div class="w-100 h-100">
+                        <table style="font-size: 15px;" class="table table-bordered text-center align-middle m-0">
+                            <thead class="position-sticky" style="top: -1px;">
+                                <tr class="border border-bottom-1">
+                                    <td class="align-middle" style="min-width: 150px;">Mã</td>
+                                    <td class="align-middle" style="min-width: 120px;">ảnh</td>
+                                    <td class="align-middle" style="min-width: 350px;">Tên sản phẩm</td>
+                                    <td class="align-middle" style="min-width: 130px;">Giá</td>
+                                    <td class="align-middle" style="min-width: 110px;">Kho hàng</td>
+                                    <td class="align-middle" style="min-width: 110px;">Doanh số</td>
+                                    <td class="align-middle" style="min-width: 150px;">Trạng thái</td>
+                                    <td class="align-middle" style="min-width: 70px;">Thao Tác</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border-0 idData" id="GH01" style="cursor: pointer; width: 150px;">P01
+                                    </td>
+                                    <td class="border-0 " style="width: 120px;"><img src="/images/anhbia.png" alt=""
+                                            class="img-fluid" draggable="false" style="width: 70px;"></td>
+                                    <td class="border-0 text-wrap" style="width: 350px;">Quần áo nam đến từ thương hiệu
+                                        nước ngoài</td>
+                                    <td class="border-0 " style="width: 130px;">200.000 - 400.000</td>
+                                    <td class="border-0 text-wrap" style="width: 110px;">10000</td>
+                                    <td class="border-0 text-wrap" style="width: 110px;">1000000000</td>
+                                    <td class="border-0" style="width: 150px;">
+                                        <div class="rounded-pill mx-auto"
+                                            style="background-color: rgb(55, 241, 55); width: 100px;">Hoạt động</div>
+                                    </td>
+                                    <td class="border-0" style="width: 90px;">
+                                        <div class="d-flex justify-content-center align-items-center m-auto btn_update"
+                                            style="width: 50px; height: 50px;"><i
+                                                class="fa-solid fa-pen-to-square  fs-5 fw-lighter"
+                                                style="cursor: pointer;"></i></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border-0 idData" id="GH01" style="cursor: pointer; width: 150px;">P01
+                                    </td>
+                                    <td class="border-0 " style="width: 120px;"><img src="/images/anhbia.png" alt=""
+                                            class="img-fluid" draggable="false" style="width: 70px;"></td>
+                                    <td class="border-0 text-wrap" style="width: 350px;">Quần áo nam đến từ thương hiệu
+                                        nước ngoài</td>
+                                    <td class="border-0 " style="width: 130px;">200.000 - 400.000</td>
+                                    <td class="border-0 text-wrap" style="width: 110px;">10000</td>
+                                    <td class="border-0 text-wrap" style="width: 110px;">1000000000</td>
+                                    <td class="border-0" style="width: 150px;">
+                                        <div class="rounded-pill mx-auto"
+                                            style="background-color: rgb(55, 241, 55); width: 100px;">Hoạt động</div>
+                                    </td>
+                                    <td class="border-0" style="width: 90px;">
+                                        <div class="d-flex justify-content-center align-items-center m-auto btn_update"
+                                            style="width: 50px; height: 50px;"><i
+                                                class="fa-solid fa-pen-to-square  fs-5 fw-lighter"
+                                                style="cursor: pointer;"></i></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="position-absolute bg-white w-100 h-100 d-none" id="form_product">
+                        <div class="row row-cols-2 row-cols-lg-5 row-cols-md-3 mx-1 m-md-2">
+                            <div class="col p-2  d-flex justify-content-center">
+                                <div class="shadow rounded-1 m-2" style="max-width: 160px; min-width: 160px;">
+                                    <div class="setImage rounded-top-1"
+                                        style="background-image: url(/images/anhbia.png);"></div>
+                                    <div class="fontSize mx-1 title my-1">Sản phẩm quần áo nàm nữ đều mặc được mát mẻ
+                                        khỏe đẹp</div>
+                                    <div class="mx-3 my-2">
+                                        <div class="fontSize text-danger ms-2">300.000đ</div>
+                                        <div class="text-secondary text-decoration-line-through ms-5"
+                                            style="font-size: 15px;">3423423đ</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mx-2">
+                                        <div class="" style="font-size: 15px;">Bán: 100</div>
+                                        <div class="" style="font-size: 15px;">Kho: 1000</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-2  d-flex justify-content-center">
+                                <div class="shadow rounded-1 m-2" style="max-width: 160px; min-width: 160px;">
+                                    <div class="setImage rounded-top-1"
+                                        style="background-image: url(/images/anhbia.png);"></div>
+                                    <div class="fontSize mx-1 title my-1">Sản phẩm quần áo nàm nữ đều mặc được mát mẻ
+                                        khỏe đẹp</div>
+                                    <div class="mx-3 my-2">
+                                        <div class="fontSize text-danger ms-2">300.000đ</div>
+                                        <div class="text-secondary text-decoration-line-through ms-5"
+                                            style="font-size: 15px;">3423423đ</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mx-2">
+                                        <div class="" style="font-size: 15px;">Bán: 100</div>
+                                        <div class="" style="font-size: 15px;">Kho: 1000</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-2  d-flex justify-content-center">
+                                <div class="shadow rounded-1 m-2" style="max-width: 160px; min-width: 160px;">
+                                    <div class="setImage rounded-top-1"
+                                        style="background-image: url(/images/anhbia.png);"></div>
+                                    <div class="fontSize mx-1 title my-1">Sản phẩm quần áo nàm nữ đều mặc được mát mẻ
+                                        khỏe đẹp</div>
+                                    <div class="mx-3 my-2">
+                                        <div class="fontSize text-danger ms-2">300.000đ</div>
+                                        <div class="text-secondary text-decoration-line-through ms-5"
+                                            style="font-size: 15px;">3423423đ</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mx-2">
+                                        <div class="" style="font-size: 15px;">Bán: 100</div>
+                                        <div class="" style="font-size: 15px;">Kho: 1000</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-2  d-flex justify-content-center">
+                                <div class="shadow rounded-1 m-2" style="max-width: 160px; min-width: 160px;">
+                                    <div class="setImage rounded-top-1"
+                                        style="background-image: url(/images/anhbia.png);"></div>
+                                    <div class="fontSize mx-1 title my-1">Sản phẩm quần áo nàm nữ đều mặc được mát mẻ
+                                        khỏe đẹp</div>
+                                    <div class="mx-3 my-2">
+                                        <div class="fontSize text-danger ms-2">300.000đ</div>
+                                        <div class="text-secondary text-decoration-line-through ms-5"
+                                            style="font-size: 15px;">3423423đ</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mx-2">
+                                        <div class="" style="font-size: 15px;">Bán: 100</div>
+                                        <div class="" style="font-size: 15px;">Kho: 1000</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-2  d-flex justify-content-center">
+                                <div class="shadow rounded-1 m-2" style="max-width: 160px; min-width: 160px;">
+                                    <div class="setImage rounded-top-1"
+                                        style="background-image: url(/images/anhbia.png);"></div>
+                                    <div class="fontSize mx-1 title my-1">Sản phẩm quần áo nàm nữ đều mặc được mát mẻ
+                                        khỏe đẹp</div>
+                                    <div class="mx-3 my-2">
+                                        <div class="fontSize text-danger ms-2">300.000đ</div>
+                                        <div class="text-secondary text-decoration-line-through ms-5"
+                                            style="font-size: 15px;">3423423đ</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mx-2">
+                                        <div class="" style="font-size: 15px;">Bán: 100</div>
+                                        <div class="" style="font-size: 15px;">Kho: 1000</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-2  d-flex justify-content-center">
+                                <div class="shadow rounded-1 m-2" style="max-width: 160px; min-width: 160px;">
+                                    <div class="setImage rounded-top-1"
+                                        style="background-image: url(/images/anhbia.png);"></div>
+                                    <div class="fontSize mx-1 title my-1">Sản phẩm quần áo nàm nữ đều mặc được mát mẻ
+                                        khỏe đẹp</div>
+                                    <div class="mx-3 my-2">
+                                        <div class="fontSize text-danger ms-2">300.000đ</div>
+                                        <div class="text-secondary text-decoration-line-through ms-5"
+                                            style="font-size: 15px;">3423423đ</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mx-2">
+                                        <div class="" style="font-size: 15px;">Bán: 100</div>
+                                        <div class="" style="font-size: 15px;">Kho: 1000</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <!-- form thêm sản phẩm -->
+        <section class="py-2 position-absolute top-0 h-100 transition d-" id="sectionInfo"
+            style="width: calc(100% - 24px); z-index: 99999;">
+            <div class="h-100 rounded-2 overflow-auto scroll" style="background-color: #f0ebeb;">
+                <h6 class="fst-italic p-2 fw-medium position-sticky top-0 bg-white z-3">Thêm sản phẩm mới</h6>
+                <form action="" method="post">
+                    <div class="bg-white">
+                        <div class="p-3 fs-5">Thông tin cơ bản</div>
+                        <div class="row mx-4">
+                            <div class="col-lg-2 col-12">Ảnh sản phẩm<span class="text-danger">*</span></div>
+                            <div class="col-lg-10 col-12">
+                                <!-- insert code để thêm ảnh sản phẩm -->
+                                <div class="d-flex flex-wrap" id="">
+                                    <!-- cộng thêm ảnh -->
+                                    <div class="p-2 add-img">
+                                        <div class="label-images text-secondary d-flex justify-content-center align-items-center border rounded-2"
+                                            style="width: 90px; height: 90px; cursor: pointer; font-size: 14px;"
+                                            id="add-img">
+                                            <div class="">
+                                                <ion-icon name="add-outline"
+                                                    class="fs-1 opacity-50 colorMain"></ion-icon>
+                                                <div class="colorMain">
+                                                    <span class="setIndex ms-2">0</span>/<span>9</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- kết thúc cộng thêm ảnh -->
+                                </div>
+                                <div class="text-secondary m-2" style="font-size: 15px;">Tải lên hình ảnh với tỷ lệ 1:1.
+                                    Việc sử
+                                    dụng hình ảnh đẹp sẽ thu hút thêm lượt truy cập vào sản phẩm của bạn</div>
+                                <!-- kết thúc insert code để thêm ảnh sản phẩm -->
+                            </div>
+                        </div>
+                        <div class="row mx-4 mt-4">
+                            <div class="col-lg-2 col-12">Ảnh bìa<span class="text-danger">*</span></div>
+                            <div class="col-lg-10 col-12">
+                                <!-- cộng thêm ảnh avatar -->
+                                <div class="d-md-flex" id="">
+                                    <!-- cộng thêm avatar -->
+                                    <div class="p-2 add-img">
+                                        <div class="label-images text-secondary d-flex justify-content-center align-items-center border rounded-2"
+                                            style="width: 90px; height: 90px; cursor: pointer; font-size: 14px;"
+                                            id="add-avatar">
+                                            <div class="">
+                                                <ion-icon name="add-outline"
+                                                    class="fs-1 opacity-50 colorMain"></ion-icon>
+                                                <div class="colorMain">
+                                                    <span class="setIndex ms-2">0</span>/<span>1</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center pe-md-5">
+                                        <ul class="mb-0 d-block">
+                                            <li class="text-secondary" style="font-size: 15px;">Tải lên hình ảnh 1:1
+                                            </li>
+                                            <li class="text-secondary" style="font-size: 15px;">Ảnh bìa sẽ được hiện thị
+                                                tại
+                                                các trang Kết qả tìm kiếm, gợi ý hôm nay...
+                                                Việc sử dụng ảnh bìa đẹp sẽ thu hút thêm lượt truy cập vào sản phẩm của
+                                                bạn
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- kết thúc cộng thêm avatar -->
+                                </div>
+                                <!-- kết thúc cộng thêm ảnh -->
+                            </div>
+                        </div>
+                        <div class="row mx-4 mt-5">
+                            <div class="col-lg-2 col-12">Video</div>
+                            <div class="col-lg-10 col-12">
+                                <!-- cộng thêm video -->
+                                <div class="d-md-flex" id="">
+                                    <!-- cộng thêm video -->
+                                    <div class="p-2 add-img">
+                                        <div class="label-images text-secondary d-flex justify-content-center align-items-center border rounded-2"
+                                            style="width: 90px; height: 90px; cursor: pointer; font-size: 14px;"
+                                            id="add-video">
+                                            <div class="">
+                                                <ion-icon name="add-outline"
+                                                    class="fs-1 opacity-50 colorMain"></ion-icon>
+                                                <div class="colorMain">
+                                                    <span class="setIndex ms-2">0</span>/<span>1</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center pe-md-5">
+                                        <ul class="mb-0 d-block">
+                                            <li class="text-secondary" style="font-size: 15px;">Kích thước tối đa 30Mb,
+                                                độ
+                                                phân giải không vượt quá 1280x1280px</li>
+                                            <li class="text-secondary" style="font-size: 15px;">Độ dài: 10s-60s</li>
+                                            <li class="text-secondary" style="font-size: 15px;">Định dạng: MP4</li>
+                                            <li class="text-secondary" style="font-size: 15px;">Lưu ý: sản phẩm có thể
+                                                hiển
+                                                thị trong khi video dang được xử lý. Video sẽ tự động hiển thị sau khi
+                                                xử lý
+                                                thành công</li>
+                                        </ul>
+                                    </div>
+                                    <!-- kết thúc cộng thêm video -->
+                                </div>
+                                <!-- kết thúc cộng thêm video -->
+                            </div>
+                        </div>
+                        <div class="row mx-4 mt-5">
+                            <div class="col-lg-2 col-12">Tên sản phẩm<span class="text-danger">*</span></div>
+                            <div class="col-lg-10 col-12">
+                                <!-- thêm tên sản phẩm -->
+                                <div class="d-md-flex" id="">
+                                    <div class="w-100 ps-2 pe-md-5">
+                                        <div class="position-relative m-2 m-md-0">
+                                            <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                                style="font-size: 15px;"><span class="productNameChar">0</span>/200
+                                            </div>
+                                            <input type="text" name="productName"
+                                                placeholder="Tên sản phẩm + Thương hiệu + Model + Thông số kỹ thuật"
+                                                class="w-100 inputBorder rounded-2 px-2"
+                                                style="font-size: 15px; height: 35px; padding-right: 50px !important;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- kết thúc thêm tên sản phẩm -->
+                            </div>
+                        </div>
+                        <div class="row mx-4 mt-5">
+                            <div class="col-lg-2 col-12">Ngành hàng<span class="text-danger">*</span></div>
+                            <div class="col-lg-10 col-12">
+                                <!-- thêm ngầnh sản phẩm -->
+                                <div class="d-md-flex" id="">
+                                    <div class="w-100 ps-2 pe-md-5">
+                                        <div class="position-relative m-2 m-md-0">
+                                            <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                                style="font-size: 14px;"><i class="fa-solid fa-pen"></i></div>
+                                            <input type="text" name="productCategory" placeholder="Chọn ngành hàng"
+                                                readonly class="w-100 inputBorder rounded-2 px-2"
+                                                style="font-size: 15px; height: 35px; padding-right: 50px !important; cursor: pointer;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- kết thúc thêm ngành hàng sản phẩm -->
+                            </div>
+                        </div>
+                        <div class="row mx-4 mt-5" style="padding-bottom: 200px;">
+                            <div class="col-lg-2 col-12">Thương Hiệu<span class="text-danger">*</span></div>
+                            <div class="col-lg-10 col-12">
+                                <!-- thêm ngầnh sản phẩm -->
+                                <div class="d-md-flex" id="">
+                                    <div class="w-100 ps-2 pe-md-5">
+                                        <div class="position-relative m-2 m-md-0">
+                                            <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                                style="font-size: 14px;"><i class="fa-solid fa-pen"></i></div>
+                                            <input type="text" name="productBrand" id="productBrand"
+                                                placeholder="Chọn thương hiệu" readonly value=""
+                                                class="w-100 inputBorder rounded-2 px-2"
+                                                style="font-size: 15px; height: 35px; padding-right: 50px !important; cursor: pointer;">
+                                            <div class="selectItem position-absolute top-100 start-0 end-0 shadow overflow-auto scroll rounded-bottom-1 d-none"
+                                                style="background-color: #fff6f6; max-height: 160px;">
+                                                <div class="ps-2 py-1 w-100 active transition" data-value="Nam"
+                                                    style="cursor: pointer;">Nam</div>
+                                                <div class="ps-2 py-1 w-100 transition" data-value="Nữ"
+                                                    style="cursor: pointer;">Nữ</div>
+                                                <div class="ps-2 py-1 w-100 transition" data-value="Khác"
+                                                    style="cursor: pointer;">Khác</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- kết thúc thêm ngành hàng sản phẩm -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white mt-3">
+                        <div class="p-3 fs-5 pt-5">Mô tả sản phẩm</div>
+                        <div class="row mx-4 mt-3">
+                            <div class="col-lg-2 col-12">Chính sách vận chuyển<span class="text-danger">*</span></div>
+                            <div class="col-lg-10 col-12">
+                                <!-- thêm chính sách vận chuyển -->
+                                <div class="d-md-flex" id="">
+                                    <div class="w-100 ps-2 pe-md-5">
+                                        <div class="position-relative m-2 m-md-0">
+                                            <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                                style="font-size: 15px;"><span class="productNameChar">0</span>/200
+                                            </div>
+                                            <input type="text" name="productName"
+                                                class="w-100 inputBorder rounded-2 px-2"
+                                                style="font-size: 15px; height: 35px; padding-right: 50px !important;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- kết thúc thêm chính sách vận chuyển -->
+                            </div>
+                        </div>
+
+                        <div class="row mx-4 mt-5">
+                            <div class="col-lg-2 col-12">Chính sách đổi trả<span class="text-danger">*</span></div>
+                            <div class="col-lg-10 col-12">
+                                <!-- thêm chính sách đổi trả -->
+                                <div class="d-md-flex" id="">
+                                    <div class="w-100 ps-2 pe-md-5">
+                                        <div class="position-relative m-2 m-md-0">
+                                            <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                                style="font-size: 15px;"><span class="productNameChar">0</span>/200
+                                            </div>
+                                            <input type="text" name="productName"
+                                                class="w-100 inputBorder rounded-2 px-2"
+                                                style="font-size: 15px; height: 35px; padding-right: 50px !important;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- kết thúc thêm chính sách đổi trả -->
+                            </div>
+                        </div>
+
+                        <div class="row mx-4 mt-5">
+                            <div class="col-lg-2 col-12">Mô tả chung<span class="text-danger">*</span></div>
+                            <div class="col-lg-10 col-12">
+                                <!-- thêm mô tả chung -->
+                                <div class="d-md-flex" id="">
+                                    <div class="w-100 ps-2 pe-md-5">
+                                        <div class="m-2 m-md-0">
+                                            <textarea name="generalDescription" id="editor" class="editor"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- kết thúc thêm mô tả chung -->
+                            </div>
+                        </div>
+                        <div class="row mx-4 mt-5">
+                            <div class="col-lg-2 col-12">Thành phần<span class="text-danger">*</span></div>
+                            <div class="col-lg-10 col-12">
+                                <!-- thêm thành phần -->
+                                <div class="d-md-flex" id="">
+                                    <div class="w-100 ps-2 pe-md-5">
+                                        <div class="m-2 m-md-0">
+                                            <textarea name="ingredient" id="editor" class="editor"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- kết thúc thêm thành phần -->
+                            </div>
+                        </div>
+                        <div class="row mx-4 mt-5">
+                            <div class="col-lg-2 col-12">Công dụng<span class="text-danger">*</span></div>
+                            <div class="col-lg-10 col-12">
+                                <!-- thêm công dụng -->
+                                <div class="d-md-flex" id="">
+                                    <div class="w-100 ps-2 pe-md-5">
+                                        <div class="m-2 m-md-0">
+                                            <textarea name="benefits" id="editor" class="editor"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- kết thúc thêm công dụng -->
+                            </div>
+                        </div>
+                        <div class="row mx-4 mt-5 pb-5">
+                            <div class="col-lg-2 col-12">Hướng dẫn sử dụng<span class="text-danger">*</span></div>
+                            <div class="col-lg-10 col-12">
+                                <!-- thêm hướng dẫn sử dụng -->
+                                <div class="d-md-flex" id="">
+                                    <div class="w-100 ps-2 pe-md-5">
+                                        <div class="m-2 m-md-0">
+                                            <textarea name="userManual" id="editor" class="editor"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- kết thúc thêm hướng dẫn sử dụng -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white mt-3 pb-5">
+                        <div class="p-3 fs-5 pt-4">Thông tin bán hàng</div>
+                        <div class="row mx-4 mt-4">
+                            <div class="col-lg-2 col-12">Phân loại hàng</div>
+                            <div class="col-lg-10 col-12">
+                                <!-- thêm giá nhập -->
+                                <div class="d-md-flex mt-3 mt-md-0" id="">
+                                    <div class="w-25 ms-2 d-flex justify-content-center align-items-center rounded-pill text-white hoverBtn"
+                                        id="addClassifyProduct"
+                                        style="background-color: #EB8D2C; height: 35px; cursor: pointer;">
+                                        Thêm phân loại<ion-icon name="add-outline"></ion-icon>
+                                    </div>
+                                </div>
+                                <!-- kết thúc thêm giá nhập-->
+                            </div>
+                        </div>
+
+                        <div class="" id="formPrice">
+                            <div class="row mx-4 mt-5">
+                                <div class="col-lg-2 col-12">Giá nhập<span class="text-danger">*</span></div>
+                                <div class="col-lg-10 col-12">
+                                    <!-- thêm giá nhập -->
+                                    <div class="d-md-flex" id="">
+                                        <div class="w-100 ps-2 pe-md-5">
+                                            <div class="m-2 m-md-0">
+                                                <input type="text" name="importPrice" placeholder="0"
+                                                    class="w-50 inputBorder rounded-2 px-2"
+                                                    style="font-size: 15px; height: 35px; padding-right: 50px !important;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- kết thúc thêm giá nhập-->
+                                </div>
+                            </div>
+                            <div class="row mx-4 mt-5">
+                                <div class="col-lg-2 col-12">Lợi nhận<span class="text-danger">*</span></div>
+                                <div class="col-lg-10 col-12">
+                                    <!-- thêm giá lợi nhuận -->
+                                    <div class="d-md-flex" id="">
+                                        <div class="w-100 ps-2 pe-md-5">
+                                            <div class="m-2 m-md-0">
+                                                <input type="text" name="profit" class="w-50 inputBorder rounded-2 px-2"
+                                                    placeholder="0"
+                                                    style="font-size: 15px; height: 35px; padding-right: 50px !important;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- kết thúc thêm lợi nhuận-->
+                                </div>
+                            </div>
+                            <div class="row mx-4 mt-5">
+                                <div class="col-lg-2 col-12">Giá bán<span class="text-danger">*</span></div>
+                                <div class="col-lg-10 col-12">
+                                    <!-- thêm giá bán -->
+                                    <div class="d-md-flex" id="">
+                                        <div class="w-100 ps-2 pe-md-5">
+                                            <div class="m-2 m-md-0">
+                                                <input type="text" name="sellingPrice" readonly 
+                                                    class="w-50 rounded-2 px-2 border-1 border-secondary opacity-50" placeholder="0"
+                                                    style="font-size: 15px; height: 35px; padding-right: 50px !important; outline: none;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- kết thúc thêm giá bán-->
+                                </div>
+                            </div>
+                            <div class="row mx-4 mt-5">
+                                <div class="col-lg-2 col-12">Kho<span class="text-danger">*</span></div>
+                                <div class="col-lg-10 col-12">
+                                    <!-- thêm số lượng kho -->
+                                    <div class="d-md-flex" id="">
+                                        <div class="w-100 ps-2 pe-md-5">
+                                            <div class="m-2 m-md-0">
+                                                <input type="text" name="warehouse"
+                                                    class="w-50 inputBorder rounded-2 px-2" placeholder="0"
+                                                    style="font-size: 15px; height: 35px; padding-right: 50px !important;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- kết thúc thêm số lượng kho-->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- thêm phâm loại hàng -->
+
+                        <div class="">
+                            <div class="d-none" id="addClassify">
+
+                            </div>
+                        </div>
+                        
+    
+                        <div class="bg-secondary bg-opacity-10 rounded-2 m-4 d-none" id="tableClassify">
+                            <div class="d-flex justify-content-center flex-wrap p-5 ">
+                                <div class="p-2 d-flex justify-content-center">
+                                    <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
+                                        placeholder="Lợi nhuận">
+                                </div>
+                                <div class="p-2 d-flex justify-content-center">
+                                    <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
+                                        placeholder="Giá nhập">
+                                </div>
+                                <div class="p-2 d-flex justify-content-center">
+                                    <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
+                                        placeholder="Kho">
+                                </div>
+                                <div class="p-2 d-flex justify-content-center">
+                                    <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
+                                        placeholder="Cân nặng">
+                                </div>
+                                <div class="p-2 d-flex justify-content-center">
+                                    <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
+                                        placeholder="Dài|L(cm)">
+                                </div>
+                                <div class="p-2 d-flex justify-content-center">
+                                    <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
+                                        placeholder="Rộng|W(cm)">
+                                </div>
+                                <div class="p-2 d-flex justify-content-center">
+                                    <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
+                                        placeholder="Cao|H(cm)">
+                                </div>
+                                <div class="p-2 d-flex justify-content-center">
+                                    <button type="button" class="rounded-2 inputBorder text-white hoverBtn"
+                                        style="height: 35px; min-width: 191px; background-color: #EB8D2C;">Áp
+                                        dụng</button>
+                                </div>
+                            </div>
+                            <div class="overflow-auto scroll mx-2">
+                                <div class="" id="addTableClassify">
+                                    <table class="w-100 table table-bordered text-center align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-nowrap classify_1" style="min-width: 150px;">Phân loại 1</th>
+                                                <th class="text-nowrap classify_2" style="min-width: 150px;">Phân loại 2</th>
+                                                <th class="text-nowrap">Giá bán</th>
+                                                <th class="text-nowrap">Lợi nhuận</th>
+                                                <th class="text-nowrap">Giá nhập</th>
+                                                <th class="text-nowrap">Kho</th>
+                                                <th class="transpotClassify text-nowrap">Cân nặng</th>
+                                                <th class="transpotClassify text-nowrap">Chiều dài</th>
+                                                <th class="transpotClassify text-nowrap">Chiều rộng</th>
+                                                <th class="transpotClassify text-nowrap">Chiều cao</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="addDataTable">
+                                            <!-- <tr>
+                                                <td rowspan="2"></td>
+                                                <td>dd</td>
+                                                <td>
+                                                    <input type="text" name="sellingPrice"
+                                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57" readonly
+                                                        maxlength="20" value="0" class="px-1 rounded-2 bg-white border-1 border-secondary opacity-50" style="height: 35px; min-width: 150px; outline: none;">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="profit"
+                                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                        maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="importPrice"
+                                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                        maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="warehouse"
+                                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                        maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="weight"
+                                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                        maxlength="20" class="transpotClassify px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="length"
+                                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                        maxlength="20" class="transpotClassify px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="width"
+                                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                        maxlength="20" class="transpotClassify px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="height"
+                                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                        maxlength="20" class="transpotClassify px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
+                                                </td>
+                                            </tr> -->
+                                            
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- kết thúc thêm phâm loại hàng -->
+                    </div>
+                </form>
+            </div>
+        </section>
+        <!-- kết thúc form thêm sản phẩm -->
+    </main>
+
+    <script>
+        $('.editor').each((i, val) => {
+            ClassicEditor
+                .create(val)
+                .catch(error => console.error(error));
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

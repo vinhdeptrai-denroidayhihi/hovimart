@@ -1,0 +1,42 @@
+@media (max-width: 740px) {
+    body {
+        padding-left: 0 !important;
+    }
+    #parentMenu {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: -100%;
+    }
+    #menu_search > div > select > option {
+        width: 100px !important;
+        font-size: 10px;
+    }
+    #menu_search > div > input {
+        width: 165px;
+        height: 35px; 
+        font-size: 15px; 
+        outline: 1cm;
+    }
+    #menu_search > div > select {
+        cursor: pointer; 
+        width: 165px; 
+        height: 35px; 
+        font-size: 15px;
+        outline: none;
+    }
+
+    #menu_search > div > select > option {
+        font-size: 15px;
+    }
+    #menu_search > div > button {
+        width: 165px; 
+        height: 35px; 
+        outline: none; 
+        background-color: #6c8ac5; 
+        font-size: 15px;
+    }
+    #info-Header {
+        max-width: none;
+    }
+}

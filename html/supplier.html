@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Quản lý gian hàng</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/laptop.css">
+    <link rel="stylesheet" href="/css/ipad.css">
+    <link rel="stylesheet" href="/css/mobile.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .padding {
+            padding-bottom: 2px;
+        }
+        .font_size {
+            font-size: 13px;
+        }
+        .targetSupplier {
+            background-color: #EB8D2C;
+        }
+        .targetSupplier:hover {
+            background-color: rgba(235, 141, 44, .7);
+        }
+    </style>
+
+</head>
+
+<body style="background-color: #EB8D2C; padding-left: 116px;">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("menu.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("main_menu").innerHTML = data;
+                    document.getElementById("main_menu").classList.add("loaded");
+                    const currentPath = window.location.pathname;
+                    document.querySelectorAll("#main_menu-child .nav-item a").forEach(link => {
+                        if (currentPath.includes(link.getAttribute("href"))) {
+                            link.parentElement.classList.add("active");
+                        }
+                    });
+                })
+                .catch(error => console.error("Lỗi tải menu:", error))
+        });
+    </script>
+    <section>
+
+    </section>
+    <header class="transition" id="parentMenu">
+        <nav class="h-100" id="main_menu">
+
+        </nav>
+    </header>
+    <main class="container position-relative" id="main_layout" style="min-height: 100vh;">
+        <section class="listInfo">
+            <section class="d-flex justify-content-between pt-3 pb-3">
+                <form action="" method="post" class="flex-fill d-flex align-items-center me-md-5">
+                    <div class="row row-cols-lg-4 row-cols-sm-1 w-100 d-flex justify-content-center justify-content-md-start ms-md-1"
+                        id="menu_search">
+                        <div class="col mb-2 px-0 px-md-1 ms-lg-1" style="flex: 0;">
+                            <input type="text" class="rounded-5 padding px-2 border-0 bg-white" name="searchID"
+                                id="searchID" placeholder="Tìm kiếm theo mã">
+                        </div>
+                        <div class="col mb-2 px-0 px-md-1" style="flex: 0;">
+                            <input type="text" class="rounded-5 padding px-2 border-0 bg-white" name="searchNameBrand"
+                                id="searchNameBrand" placeholder="Tìm kiếm theo tên">
+                        </div>
+                        <div class="col mb-2 px-0 px-md-1" style="flex: 0;">
+                            <select class="pe-2 rounded-5 padding px-2 border-0 bg-white" name="searchStatus"
+                                id="searchStatus">
+                                <option value="">Tìm theo trạng thái</option>
+                                <option value="hoatdong">Hoạt động</option>
+                                <option value="ngung">Ngưng hoạt động</option>
+                            </select>
+                        </div>
+                        <div class="col ms-lg-1 my-lg-0 px-0 px-lg-1" style="flex: 0; font-size: 15px;">
+                            <button type="submit" class="rounded-5 border-0 padding px-3 text-white transition pb-1"
+                                id="menu_search-submit">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="row row-cols-1 row-cols-lg-2 flex-lg-row m-0 my-auto" id="addAndExcel">
+                    <div class="col mb-2 marginAuto px-0 px-md-2 d-flex justify-content-end d-none">
+                        <div class="d-flex justify-content-center align-items-center bg-white rounded-5 addInfo w-100"  style="min-width: 155px;">
+                            <p class="mb-0 me-1">Thêm nhà cung cấp</p><ion-icon name="add-outline"></ion-icon>
+                        </div>
+                    </div>
+                    <div class="col mb-2 mt-2 mt-md-0 marginAuto px-0 px-md-2 d-flex justify-content-end">
+                        <div class="d-flex justify-content-center align-items-center bg-white rounded-5 excel w-100"
+                            style="min-width: 155px;">
+                            <p class="mb-0 me-2">Xuất Excel</p><ion-icon name="document-text-outline"></ion-icon>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="mx-1 bg-white border scroll overflow-x-scroll mb-3" style="height: 90vh;"
+                    id="backgroudParentItem">
+                    <table style="font-size: 13px;" class="table table-bordered text-center align-middle m-0">
+                        <thead class="position-sticky" style="top: -1px;">
+                            <tr class="border border-bottom-1">
+                                <td class="align-middle" style="min-width: 100px;">Mã</td>
+                                <td class="align-middle" style="min-width: 100px;">Tên gian hàng</td>
+                                <td class="align-middle" style="min-width: 100px;">Liên hệ</td>
+                                <td class="align-middle" style="min-width: 100px;">Địa chỉ</td>
+                                <td class="align-middle" style="min-width: 90px;">Ngày thêm</td>
+                                <td class="align-middle" style="min-width: 90px;">Ngày sửa</td>
+                                <td class="align-middle" style="min-width: 90px;">Trạng thái</td>
+                                <td class="align-middle" style="min-width: 70px;">Thao Tác</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="idData" id="GH01" style="cursor: pointer;">GH01</td>
+                                <td class="text-wrap">Quần áo nam đến từ thương hiệu nước ngoài</td>
+                                <td class="text-wrap">
+                                    <p class="m-0">0987654321</p>
+                                    <p class="m-0">abc123@gmail.com</p>
+                                </td>
+                                <td class="text-wrap">Phú diễn, Đường phú diễn, Quận bắc từ liêm, Hà Nội</td>
+                                <td class="text-wrap">2025-09-22</td>
+                                <td class="text-wrap">2025-09-22</td>
+                                <td>
+                                    <div class="rounded-pill mx-auto"
+                                        style="background-color: rgb(55, 241, 55); width: 100px;">Hoạt động</div>
+                                </td>
+                                <td class="">
+                                    <div class="d-flex justify-content-center align-items-center m-auto btn_update"
+                                        style="width: 50px; height: 50px;"><i
+                                            class="fa-solid fa-pen-to-square  fs-5 fw-lighter"
+                                            style="cursor: pointer;"></i></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="idData" id="GH01" style="cursor: pointer;">GH01</td>
+                                <td class="text-wrap">Quần áo nam đến từ thương hiệu nước ngoài</td>
+                                <td class="text-wrap">
+                                    <p class="m-0">0987654321</p>
+                                    <p class="m-0">abc123@gmail.com</p>
+                                </td>
+                                <td class="text-wrap">Phú diễn, Đường phú diễn, Quận bắc từ liêm, Hà Nội</td>
+                                <td class="text-wrap">2025-09-22</td>
+                                <td class="text-wrap">2025-09-22</td>
+                                <td>
+                                    <div class="rounded-pill mx-auto"
+                                        style="background-color: rgb(55, 241, 55); width: 100px;">Hoạt động</div>
+                                </td>
+                                <td class="">
+                                    <div class="d-flex justify-content-center align-items-center m-auto btn_update"
+                                        style="width: 50px; height: 50px;"><i
+                                            class="fa-solid fa-pen-to-square  fs-5 fw-lighter"
+                                            style="cursor: pointer;"></i></div>
+                                </td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </section>
+        <section class="position-fixed top-0 end-0 bottom-0 start-0 bg-dark bg-opacity-10 modal-overlay d-none"
+            id="information_brand">
+            <div class="bg-white shadow-lg rounded-2 overflow-auto scroll position-absolute top-50 start-50 translate-middle "
+                style="min-width: 365px;" id="popup_updateBrand">
+                <div class="d-flex justify-content-between align-items-center position-sticky top-0 bg-white">
+                    <p class="m-2 fw-medium fst-italic">Thêm thương hiệu mới</p>
+                    <ion-icon class="fs-2 me-2" id="close" name="close-outline"
+                        style="cursor: pointer;"></ion-icon>
+                </div>
+                <div id="addFormData">
+
+                </div>
+            </div>
+        </section>
+        <section class="py-2 position-absolute h-100 z-3 transition d-none" id="sectionInfo"
+            style="width: calc(100% - 24px);">
+            <div class="d-md-flex h-100">
+                <div class="bg-white me-md-1 mb-1 mb-md-0 rounded rounded-start-2 rounded-bottom-0 rounded-top-0 overflow-auto scroll"
+                    id="info-Header">
+                    <div class="d-flex justify-content-between align-items-center top-0 start-0 e bg-white position-sticky top-0 start-0 end-0 z-3"
+                        id="back-info">
+                        <div class="d-flex align-items-center" id="back-info__child">
+                            <ion-icon name="return-up-back-outline" class="fs-4 p-2" id="back"
+                                style="cursor: pointer;"></ion-icon>
+                            <p class="m-0 ps-4 pe-2 fst-italic" style="font-size: 14px;">Chi tiết khách hàng</p>
+                        </div>
+                    </div>
+                    <div class="px-2">
+                        <div class="text-center">
+                            <div class="mx-auto mt-4" style="width: 80px; height: 80px;">
+                                <img src="/images/logo.png" alt=""
+                                    class="rounded-circle border w-100 h-100 object-fit-contain">
+                            </div>
+                            <div class="font_size my-2">KH01</div>
+                            <div class="font_size" style="color: rgb(16, 221, 16);">Hoạt động</div>
+                            <hr class="">
+                        </div>
+                        <div class="text-start">
+                            <div class="d-flex align-items-center font_size">
+                                <ion-icon name="person"></ion-icon>
+                                <p class="m-0 ms-2 text-capitalize">Hoàng Doãn Vĩnh</p>
+                            </div>
+                            <div class="d-flex align-items-center font_size">
+                                <ion-icon name="transgender"></ion-icon>
+                                <p class="m-0 ms-2 text-capitalize">Nam</p>
+                            </div>
+                            <div class="d-flex align-items-center font_size">
+                                <ion-icon name="calendar-number"></ion-icon>
+                                <p class="m-0 ms-2">2005-03-14</p>
+                            </div>
+                            <hr class="">
+                        </div>
+                        <div class="text-start">
+                            <div class="d-flex align-items-center font_size">
+                                <ion-icon name="call"></ion-icon>
+                                <p class="m-0 ms-2">0987654321</p>
+                            </div>
+                            <div class="d-flex align-items-center font_size">
+                                <ion-icon name="mail"></ion-icon>
+                                <p class="m-0 ms-2" style="word-break: break-all;  white-space: normal;">
+                                    hoangvinh140305@gmail.com</p>
+                            </div>
+                            <div class="d-flex align-items-center font_size">
+                                <ion-icon name="pricetag"></ion-icon>
+                                <p class="m-0 ms-2" style="word-break: break-all;  white-space: normal;">Khách hàng</p>
+                            </div>
+                            <hr class="">
+                        </div>
+                        <div class="text-start">
+                            <div class="d-flex align-items-center font_size">
+                                <i class="fa-solid fa-city"></i>
+                                <p class="m-0 ms-2 text-capitalize">Thanh Hóa</p>
+                            </div>
+                            <div class="d-flex align-items-center font_size">
+                                <i class="fa-solid fa-road"></i>
+                                <p class="m-0 ms-2 text-capitalize">Thiệu Hóa</p>
+                            </div>
+                            <div class="d-flex align-items-center font_size">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <p class="m-0 ms-2 text-capitalize">khu phố tra thôn</p>
+                            </div>
+                            <hr class="">
+                        </div>
+                        <div class="text-start">
+                            <div class="d-flex align-items-center font_size">
+                                <p class="m-0 ms-2 text-capitalize fw-medium">Người tạo</p>
+                                <p class="m-0 ms-2 text-capitalize">Hoàng Vĩnh</p>
+                            </div>
+                            <div class="d-flex align-items-center font_size">
+                                <p class="m-0 ms-2 text-capitalize fw-medium">Ngày tạo</p>
+                                <p class="m-0 ms-2 text-capitalize">2025-09-15</p>
+                            </div>
+                            <div class="d-flex align-items-center font_size">
+                                <p class="m-0 ms-2 text-capitalize fw-medium">Người cập nhật</p>
+                                <p class="m-0 ms-2 text-capitalize">Hoàng Vĩnh</p>
+                            </div>
+                            <div class="d-flex align-items-center font_size">
+                                <p class="m-0 ms-2 text-capitalize fw-medium">Ngày cập nhật</p>
+                                <p class="m-0 ms-2 text-capitalize">2025-09-15</p>
+                            </div>
+                            <hr class="">
+                        </div>
+                    </div>
+                </div>
+                <div class="w-100 bg-white overflow-auto scroll">
+                    <div class="position-sticky top-0 bg-white z-3 py-2 ms-2 fs-5 fst-italic">Chi tiết gian hàng</div>
+                    <div class="row row-cols-1 row-cols-lg-2">
+                        <div class="col">
+                            <div class="fst-italic ms-2 mb-2 text-secondary opacity-50">Thông tin gian hàng</div>
+                            <div class="mx-4 my-3">
+                                <label for="fullName" class="fst-italic">Mã gian hàng:</label><br>
+                                <input type="text" name="fullName" id="fullName" value="GH01" disabled
+                                    class="w-100 px-2 form-control backgroudInput">
+                            </div>
+                            <div class="mx-4 my-3">
+                                <label for="storeName" class="fst-italic">Tên gian hàng:</label><br>
+                                <input type="text" name="storeName" id="storeName" disabled
+                                    class="w-100 px-2 form-control backgroudInput">
+                            </div>
+                            <div class="mx-4">
+                                <label for="phoneNumber" class="fst-italic">Số điện thoại:</label><br>
+                                <input type="text" name="phoneNumber" id="phoneNumber" disabled
+                                    class="w-100 px-2 form-control backgroudInput">
+                            </div>
+                            <div class="mx-4 my-3">
+                                <label for="email" class="fst-italic">Email:</label><br>
+                                <input type="text" name="email" id="email" disabled
+                                    class="w-100 px-2 form-control backgroudInput">
+                            </div>
+                            <div class="mx-4 my-3">
+                                <label for="pickupAddress" class="fst-italic">Địa chỉ lấy hàng:</label><br>
+                                <input type="text" name="pickupAddress" id="pickupAddress"
+                                    value="Số nhà 2, đường phú diễn, phường phú diễn, quận bắc từ liêm, hà nội" disabled
+                                    class="w-100 px-2 form-control backgroudInput">
+                            </div>
+                            <div class="mx-4 my-3">
+                                <label for="returnAddress" class="fst-italic">Địa chỉ trả hàng:</label><br>
+                                <input type="text" name="returnAddress" id="returnAddress" disabled
+                                    class="w-100 px-2 form-control backgroudInput">
+                            </div>
+                            <div class="mx-4 my-3">
+                                <label for="bankName" class="fst-italic">Tên ngân hàng:</label><br>
+                                <input type="text" name="bankName" id="bankName" disabled
+                                    class="w-100 px-2 form-control backgroudInput">
+                            </div>
+                            <div class="mx-4 my-3">
+                                <label for="bankAccountNumber" class="fst-italic">Số tài khoản:</label><br>
+                                <input type="text" name="bankAccountNumber" id="bankAccountNumber" disabled
+                                    class="w-100 px-2 form-control backgroudInput">
+                            </div>
+                            <div class="mx-4 my-3">
+                                <label for="accountHolderName" class="fst-italic">Tên chủ tài khoản:</label><br>
+                                <input type="text" name="accountHolderName" id="accountHolderName" disabled
+                                    class="w-100 px-2 form-control backgroudInput">
+                            </div>
+                            <div class=" my-3">
+                                <div class="mx-4">
+                                    <label for="accountHolderName" class="fst-italic">Chính sách vận chuyển:</label><br>
+                                    <div class="row mb-3">
+                                        <div class="col parent-img">
+                                            <div class="border border-1 border-dark border-opacity-50 mt-2 mx-auto d-flex align-items-center overflow-hidden backgroudInput"
+                                                style="width: 140px; height: 150px;">
+                                                <img src="" alt="" class="img-fluid img_popup"
+                                                    style="object-fit: cover; display: none;">
+                                                <iframe class="pdf_popup scroll" src=""
+                                                    style="width: 100%; height: 100%; border: none; display: none;">
+                                                </iframe>
+                                                <input type="file" class="d-none input-images " id="shippingPolicy"
+                                                    name="shippingPolicy" disabled accept="">
+                                            </div>
+                                            <label for="shippingPolicy"
+                                                class="label-images text-secondary mx-auto d-flex justify-content-center align-items-center"
+                                                style="width: 140px; cursor: pointer; font-size: 14px;">Logo thương hiệu
+                                                <ion-icon class="h5 text-dark text-opacity-50 ms-2 mb-0"
+                                                    name="camera-outline"></ion-icon>
+                                            </label>
+                                        </div>
+                                        <div class="col parent-img">
+                                            <div class="border border-1 border-dark border-opacity-50 mt-2 mx-auto d-flex align-items-center overflow-hidden backgroudInput"
+                                                style="width: 140px; height: 150px;">
+                                                <img src="" alt="" class="img-fluid img_popup"
+                                                    style="object-fit: cover; display: none;">
+                                                <iframe class="pdf_popup scroll" src=""
+                                                    style="width: 100%; height: 100%; border: none; display: none;">
+                                                </iframe>
+                                                <input type="file" class="d-none input-images " id="shippingPolicy-1"
+                                                    name="shippingPolicy_1" disabled accept="">
+                                            </div>
+                                            <label for="shippingPolicy-1"
+                                                class="label-images text-secondary mx-auto d-flex justify-content-center align-items-center"
+                                                style="width: 140px; cursor: pointer; font-size: 14px;">Logo thương hiệu
+                                                <ion-icon class="h5 text-dark text-opacity-50 ms-2 mb-0"
+                                                    name="camera-outline"></ion-icon>
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="border rounded-3 mx-3 shadow">
+                                <a href="/html/product.html" target="_blank" class="d-flex justify-content-center text-decoration-none text-dark p-3 targetSupplier">
+                                    Quản lý gian hàng
+                                </a>
+                            </div>
+
+                            <div class="mx-3 mt-5">
+                                <div class="fst-italic text-center my-2">Lịch sử</div>
+                                <div class="border rounded-2 shadow overflow-auto scroll" style="height: 400px;">
+                                    <div class="py-2 mx-2 border-bottom">
+                                        <div class="ms-2">
+                                            <p class="mb-0 fst-italic" style="font-size: 14px;">Đã thêm sản phẩm mới</p>
+                                            <small class="" style="font-size: 11px;">2025-09-23</small>
+                                        </div>
+                                    </div>
+                                    <div class="py-2 mx-2 border-bottom">
+                                        <div class="ms-2">
+                                            <p class="mb-0 fst-italic" style="font-size: 14px;">Đã thêm sản phẩm mới</p>
+                                            <small class="" style="font-size: 11px;">2025-09-23</small>
+                                        </div>
+                                    </div>
+                                    <div class="py-2 mx-2 border-bottom">
+                                        <div class="ms-2">
+                                            <p class="mb-0 fst-italic" style="font-size: 14px;">Đã thêm sản phẩm mới</p>
+                                            <small class="" style="font-size: 11px;">2025-09-23</small>
+                                        </div>
+                                    </div>
+                                    <div class="py-2 mx-2 border-bottom">
+                                        <div class="ms-2">
+                                            <p class="mb-0 fst-italic" style="font-size: 14px;">Đã thêm sản phẩm mới</p>
+                                            <small class="" style="font-size: 11px;">2025-09-23</small>
+                                        </div>
+                                    </div>
+                                    <div class="py-2 mx-2 border-bottom">
+                                        <div class="ms-2">
+                                            <p class="mb-0 fst-italic" style="font-size: 14px;">Đã thêm sản phẩm mới</p>
+                                            <small class="" style="font-size: 11px;">2025-09-23</small>
+                                        </div>
+                                    </div>
+                                    <div class="py-2 mx-2 border-bottom">
+                                        <div class="ms-2">
+                                            <p class="mb-0 fst-italic" style="font-size: 14px;">Đã thêm sản phẩm mới</p>
+                                            <small class="" style="font-size: 11px;">2025-09-23</small>
+                                        </div>
+                                    </div>
+                                    <div class="py-2 mx-2 border-bottom">
+                                        <div class="ms-2">
+                                            <p class="mb-0 fst-italic" style="font-size: 14px;">Đã thêm sản phẩm mới</p>
+                                            <small class="" style="font-size: 11px;">2025-09-23</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

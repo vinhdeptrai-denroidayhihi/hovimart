@@ -1,0 +1,225 @@
+
+/* bắt đầu css toàn bộ */
+:root {
+    --main-color: #EB8D2C;
+}
+
+.scroll::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    background: #dddbdb;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.scroll::-webkit-scrollbar-thumb:hover {
+    background: #b6b5b5;
+}
+
+.transition {
+    transition: all .3s ease-out;
+}
+
+.transitionButton {
+    transition: all .1s ease-out;
+}
+
+@media (min-width: 992px) and (max-width: 1115px) {
+    #searchNamePerson, #searchNameBrand {
+        margin-left: 40px;
+    }
+
+    #searchStatus {
+        margin-left: 80px;
+    }
+}
+
+/* kết thúc css toàn bộ */
+
+
+
+
+
+/* bắt đầu css menu */
+
+#main_menu {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+#main_menu.loaded {
+  opacity: 1;
+}
+
+.active {
+    color: var(--main-color) !important;
+    background-color: #f3e5d6;
+}
+
+#parentMenu {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+}
+
+#main_menu-child>li>a:hover {
+    color: var(--main-color) !important;
+    background-color: #f3e5d6;
+}
+
+#main_layout {
+    max-width: 2000px;
+    min-width: 365px
+}
+
+#menu_search-submit:hover {
+    background-color: #3062c5 !important;
+}
+
+#status_brand {
+    background-color: #79f36e;
+}
+
+#set_status {
+    background-color: #ffb2b2;
+}
+
+@keyframes transition_addInfomation1 {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(.6);
+        opacity: 0;
+    }
+}
+
+@keyframes transition_addInfomation2 {
+    0% {
+        transform: scale(.6);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* kết thúc css menu */
+
+
+
+
+/* bắt đầu css tìm kiếm */
+#menu_search > div > input {
+    width: 180px;
+    height: 35px; 
+    font-size: 15px; 
+    outline: 1cm;
+}
+
+#menu_search > div > select {
+    cursor: pointer; 
+    width: 180px; 
+    height: 35px; 
+    font-size: 15px;
+    outline: none;
+}
+
+#menu_search > div > select > option {
+    font-size: 15px;
+}
+#menu_search > div > button {
+    width: 180px; 
+    height: 35px; 
+    outline: none; 
+    background-color: #6c8ac5; 
+    font-size: 15px;
+    margin-left: 3px;
+}
+
+@media (max-width: 1235px) {
+
+    #addBrandAndExcel, #addAndExcel {
+        flex-direction: column-reverse !important;
+    }
+    .marginAuto {
+        margin: auto;
+    }
+}
+
+#addAndExcel .addInfo, #addAndExcel .addInfo, #addAndExcel .addInfo{
+    height: 35px; 
+    cursor: pointer; 
+    font-size: 15px;
+}
+
+#addBrandAndExcel .excel , #addAndExcel .excel{
+    height: 35px; 
+    cursor: pointer; 
+    font-size: 15px;
+}
+
+/* kết thúc css tìm kiếm  */
+
+
+
+
+/* bắt đầu css popup */
+.btnSetData_popup:hover {
+    box-shadow: 0px 0px 5px #6c8ac5;
+}
+
+#form_add {
+    width: 70vw;
+    min-width: 375px !important;
+    height: 90vh;
+}
+.noteBrand {
+    min-height: 320px;
+}
+
+/* kết thúc css popup */
+
+
+
+
+/* bắt đầu css thông tin chi tiết khách hàng */
+#info-Header {
+    max-width: 220px;
+    min-width: 220px;
+}
+
+.backgroudInput {
+    background-color: #f8f7f7 !important;
+}
+
+.animationInfoDetailCustomer {
+    animation: animationInfoDetailCustomer .2s ease-in-out;
+}
+
+.animationInfoDetailCustomer_1 {
+    animation: animationInfoDetailCustomer_1 .2s ease-in-out;
+}
+
+@keyframes animationInfoDetailCustomer {
+    0%{top: 100%; opacity: 0;}
+    100%{top: 0; opacity: 1;}
+}
+@keyframes animationInfoDetailCustomer_1 {
+    0%{top: 0; opacity: 1;}
+    100%{top: 100%; opacity: 0;}
+}
+
+/* kết thúc css thông tin chi tiết khách hàng */
+

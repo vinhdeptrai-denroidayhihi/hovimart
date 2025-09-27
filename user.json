@@ -1,0 +1,24 @@
+{
+    "user": [
+        {
+            "id": "US01",
+            "fullName": "Hoàng Doãn Vĩnh",
+            "dateOfBirth": "2005-03-14",
+            "gender": "boy",
+            "password": "123",
+            "email": "hoangvinh140305@gmail.com",
+            "phone": "0987654321",
+            "status": "active",
+            "createDate": "2025-09-15",
+            "updateDate": "",
+            "avartar": "",
+            "token": "",
+            "dateToken": "",
+            "addressIP": "" ,
+            "city": "Thanh Hóa",
+            "ward": "Thiệu Hóa",
+            "specific": "Tra Thôn",
+            "role": "Khách hàng"
+        }
+    ]
+}

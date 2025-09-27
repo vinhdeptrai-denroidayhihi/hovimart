@@ -1,0 +1,20 @@
+@media (max-width: 1024px) {
+
+    #form_add {
+        
+    }
+    .noteBrand {
+        min-height: 150px;
+    }
+    #menu_search > div > select > option {
+        font-size: 14px;
+    }
+    
+    #addAndExcel .addInfo, #addAndExcel .addInfo{
+        width: 165px !important;
+    }
+
+    #addAndExcel .excel , #addAndExcel .excel{
+        width: 165px !important;
+    }
+}
