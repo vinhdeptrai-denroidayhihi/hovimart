@@ -126,6 +126,7 @@ $('.add-img').each((i, val) => {
                     }
                 });
             }
+            console.log($(parent + ' .add-img'));
             $(parent + ' .add-img').before(textImage());
             $('#product_' + index).click();
             renderImage(parent, addClick, length);
