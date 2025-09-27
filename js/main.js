@@ -251,7 +251,7 @@ function renderImage(parent, addClick, length) {
 }
 
 function deleteImage(parent, addClick) {
-    $('.deleteImg').each((i, value) => {
+    $(parent +' .deleteImg').each((i, value) => {
         $(value).click(() => {
             $(value).closest('.parent-img').remove()
             $(parent + addClick).removeClass('d-none');
@@ -381,7 +381,6 @@ function recursionInput(i) {
                 .on('input', () => {
                     if(i == 0) {
                         if($('#addDataTable .parent' + j).length){
-                            // console.log($('#addDataTable .parent' + j).children());
                             $('#addDataTable .parent' + j).children().first().text($(value).find('.classify').val());
                         }else{
                             $('#addDataTable').append(tableClassify($(value).find('.classify').val(),'', '', 'parent' + j));
@@ -389,26 +388,20 @@ function recursionInput(i) {
                         }
                     }
                     if(i == 1) {
-                        // if($('#addDataTable .parent' + j).length || $('#addDataTable .children' + j).length){
-                        //     console.log($('#addDataTable .' + j).children());
-                        //     $('#addDataTable .parent' + j).children(':nth-child(2)').text($(value).find('.classify').val());
-                        //     // $('#addDataTable .' + j).children().first().prop('rowspan', j);
-                        // }else{
-                        //     $('#addDataTable .parent' + j).after(tableClassify('', $(value).find('.classify').val(), '', 'children' + j));
-                        // }
                         arr.forEach((i, val)=> {
                                 $(value).find('.classify').each((v, val)=> {
                                     if($(val).val()){
-                                        console.log($('#addDataTable .children' + j).length);
+                                        // console.log($('#addDataTable .children' + j).length);
+                                        // console.log($('#addDataTable .children' + j));
                                         if($('#addDataTable .children' + j).length){
-                                            // console.log($('#addDataTable .children' + j).children(':nth-child(2)'), $(val).val());
                                             $('#addDataTable .children' + j).children(':nth-child(2)').text($(val).val());
-                                        }else {
-                                            $('#addDataTable .parent' + i).after('', tableClassify($(val).val(), '', 'children' + j));
                                         }
+                                        else {
+                                            $('#addDataTable .parent' + i).after(tableClassify('', $(val).val(), '', 'children' + j));
+                                        }
+                                        console.log(i);
                                     }
                                 })
-                            
                         })
 
                     }
