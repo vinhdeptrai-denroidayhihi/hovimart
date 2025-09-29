@@ -336,8 +336,8 @@ $('#addClassifyProduct').click(() => {
         $('#addClassify').removeClass('d-none');
         $('#addClassify').append(formClassify(indexClassify));
         $('#tableClassify').removeClass('d-none');
-        if(indexClassify == 1){
-            $('.classification_2').each((i, v)=> {
+        if (indexClassify == 1) {
+            $('.classification_2').each((i, v) => {
                 $(v).removeClass('d-none');
             })
         }
@@ -351,12 +351,12 @@ $('#addClassifyProduct').click(() => {
 $(document).on("click", ".closeFormClassify", function () {
     $(this).closest(".classifyParent").remove();
     indexClassify--;
-    
+
     if (indexClassify == 0) {
         $('#addClassify').addClass('d-none');
         $('#tableClassify').addClass('d-none');
         $('#formPrice').removeClass('d-none');
-    }else{
+    } else {
         $('#addClassify .classifyParent').find('.titleClassify').text('Phân loại 1');
         $('#addClassify .classifyParent').find('.classifyName').prop('name', 'classifyName' + 0);
         $('#addClassify .classifyParent').find('.classify').each((i, val) => {
@@ -371,7 +371,65 @@ $(document).on("click", ".closeFormClassify", function () {
 });
 
 
+
+function deleteColumn() {
+    if ($('#formClassify1').length) {
+        $('.classification_1').each((i, v) => {
+            if ($('#formClassify1').find('.classifyName').val().trim()) {
+                $('.classify_1').text($('#formClassify1').find('.classifyName').val());
+            } else {
+                $('.classify_1').text('Phân loại 1');
+            }
+            if (i == 0) {
+                $($('.classification_2')[i]).addClass('d-none');
+                $('#addDataTable .parent' + i).children(':nth-child(2)').addClass('d-none');
+                $('#addDataTable .parent' + i).children(':nth-child(2)').text('');
+            } else {
+                $('#addDataTable .parent' + i).each((j, val) => {
+                    $(val).children(':nth-child(2)').addClass('d-none');
+                });
+                $('#addDataTable .children' + i).each((j, val) => {
+                    $(val).remove();
+                });
+            }
+        });
+        arrForm1 = [];
+        $('#formClassify1').find('.classify').each((q, value) => {
+            if ($(value).val().trim()) {
+                if (q == 0) {
+                    console.log($('#addDataTable').empty());
+                    $('#addDataTable').append(tableClassify($(value).val(), '', '', 'd-none', 'parent' + q));
+                    arrForm1.push(q);
+                } else {
+                    $('.parent' + (q - 1)).after(tableClassify($(value).val(), '', '', 'd-none', 'parent' + q));
+                    arrForm1.push(q);
+                }
+            } else {
+
+
+            }
+        });
+    } else {
+        $('.classification_2').each((i, v) => {
+            $('.classify_2').text('Phân loại 2');
+            if (i == 0) {
+                $(v).addClass('d-none');
+                $('#addDataTable .parent' + i).children(':nth-child(2)').addClass('d-none');
+                $('#addDataTable .parent' + i).children(':nth-child(2)').text('');
+            } else {
+                $('#addDataTable .parent' + i).each((j, val) => {
+                    $(val).children(':nth-child(2)').addClass('d-none');
+                });
+                $('#addDataTable .children' + i).each((j, val) => {
+                    $(val).remove();
+                });
+            }
+        })
+    }
+}
+
 function autoAddInput() {
+
     const inputElement = $('.classifyParent');
     inputElement.each((i, val) => {
         $(val).find('#addElement' + i)
@@ -382,48 +440,36 @@ function autoAddInput() {
     });
 }
 
-function deleteColumn() {
-    if($('#formClassify1').length){
 
-    }else {
-        $('.classification_2').each((i, v)=> {
-            if(i == 0) {
-                $(v).addClass('d-none');
-                $('#addDataTable .parent' + i).children(':nth-child(2)').addClass('d-none');
-                $('#addDataTable .parent' + i).children(':nth-child(2)').text('');
-            }else {
-                $('#addDataTable .parent' + i).each((j, val)=> {
-                    $(val).children(':nth-child(2)').addClass('d-none');
-                });
-                $('#addDataTable .children' + i).each((j, val)=> {
-                    $(val).remove();
-                });
-            }
-        })
-    }
-}
-
-
-var arr = [];
+var arrForm1 = [];
+var arrForm2 = [];
 var checkAddInput = false;
-function recursionInput(i) {
-    const length = $('#addElement' + i + ' .col-lg-6').length - 1;
-    $('#addElement' + i + ' .col-lg-6').each((j, value) => {
-        if (j == length) {
+var indexInput = 0;
+function recursionInput(r) {
+    indexInput = r;
+    var length = $('#addElement' + r + ' .col-lg-6').length - 1;
+    console.log('leng ',length);
+    $('#addElement' + r + ' .col-lg-6').each((j, value) => {
+        // if (j == length) {
             $(value).find('.classify')
                 .off('input')
                 .on('input', () => {
+                    var i = indexInput;
+                    console.log(i, j);
                     if ($(value).find('.classify').val().trim()) {
                         if (i == 0) {
                             if ($('#addDataTable .parent' + j).length) {
                                 $('#addDataTable .parent' + j).children().first().text($(value).find('.classify').val().trim());
                             } else {
-                                $('#addDataTable').append(tableClassify($(value).find('.classify').val().trim(), '', '', 'd-none', 'parent' + j));
+                                if ($('#formClassify1').length) {
+                                    $('#addDataTable').append(tableClassify($(value).find('.classify').val().trim(), '', '', '', 'parent' + j));
+                                } else {
+                                    $('#addDataTable').append(tableClassify($(value).find('.classify').val().trim(), '', '', 'd', 'parent' + j));
+                                }
                                 if ($('#addElement' + 1).length) {
                                     $('#addElement' + 1 + ' .col-lg-6').each((e, value) => {
                                         if ($(value).find('.classify').val()) {
                                             if (e == 0) {
-                                                console.log($('#addDataTable .parent' + j));
                                                 $('#addDataTable .parent' + j).children(':nth-child(2)').text($(value).find('.classify').val().trim());
                                             } else {
                                                 $('#addDataTable .parent' + j).after(tableClassify('', $(value).find('.classify').val().trim(), 'd-none', '', 'children' + j));
@@ -432,31 +478,12 @@ function recursionInput(i) {
                                         }
                                     });
                                 }
-                                arr.push(j);
+                                arrForm1.push(j);
                             }
                         }
                         if (i == 1) {
-
-                            $(value).find('.classify').each((v, values) => {
-                                if ($(values).val()) {
-                                    if ($('#addDataTable .children' + j).length) {
-                                        $('#addDataTable .children' + j).children(':nth-child(2)').text($(values).val().trim());
-                                    } else {
-
-                                        if (j == 0) {
-                                            arr.forEach((element, e) => {
-                                                $('#addDataTable .parent' + e).children(':nth-child(2)').text($(values).val().trim())
-                                            });
-                                        } else {
-                                            arr.forEach((element, e) => {
-                                                $('#addDataTable .parent' + e).after(tableClassify('', $(values).val().trim(), 'd-none', '', 'children' + j));
-                                                $('#addDataTable .parent' + e).children().first().prop('rowspan', (j + 1));
-                                            });
-                                        }
-                                    }
-                                }
-                            })
-
+                            setValueTable(j, value);
+                            arrForm2.push(j);
                         }
                         if (j == $('#addElement' + i + ' .col-lg-6').length - 1) {
                             $('#addElement' + i).append(inputElementText(i));
@@ -466,36 +493,215 @@ function recursionInput(i) {
                                 $('#addElement' + i).children().first().find('.addDelete').append(iconDeletClassify);
                             }
                             handleDeleteClassify();//gọi hàm xóa biến thể
-                            recursionInput(i);// hàm gọi tạo biến thể (Đệ quy)
+                            autoAddInput();// hàm gọi tạo biến thể (Đệ quy)
                         }
                     }
                 });
-        }
+        // }
     });
 }
 
+function setValueTable(j, value) {
+    $(value).find('.classify').each((v, values) => {
+        if ($(values).val()) {
+            if ($('#addDataTable .children' + j).length) {
+                $('#addDataTable .children' + j).children(':nth-child(2)').text($(values).val().trim());
+            } else {
+                console.log(j);
+                if (j == 0) {
+                    arrForm1.forEach((element, e) => {
+                        $('#addDataTable .parent' + e).children(':nth-child(2)').text($(values).val().trim())
+                    });
+                } else {
+                    arrForm1.forEach((element, e) => {
+                        $('#addDataTable .parent' + e).after(tableClassify('', $(values).val().trim(), 'd-none', '', 'children' + j));
+                        $('#addDataTable .parent' + e).children().first().prop('rowspan', (j + 1));
+                    });
+                }
+            }
+        }
+    })
+}
+
 function handleDeleteClassify() {
-    $('.deleteClassify').each((d, vall) => {
+    $('#addElement0').find('.deleteClassify').each((d, vall) => {
         $(vall)
             .off('click')
             .on('click', () => {
-                const inputElement = $('.classifyParent');
-                inputElement.each((i, val) => {
-                    $(val).find('#addElement' + i)
-                        .off('click')
-                        .on('click', () => {
-                            $(val).find(vall).closest('.col-lg-6').remove();
-                            // $('#addDataTable .parent' + i)
-                            console.log(d);
-                            // xóa nút xóa biến thể
-                            if ($('#addElement' + i).find('.deleteClassify').length < 2) {
-                                $('#addElement' + i).children().first().find('.deleteClassify').remove();
-                            }
-                            autoAddInput();
+                $(vall).closest('.col-lg-6').remove();
+                if ($('#addDataTable .parent' + d).length) {
+                    if (index !== -1) {
+                        arrForm1.splice(arrForm1.indexOf(d), 1); // xóa tại index
+                    }
+                    // let result = $('#addDataTable .parent' + d).nextUntil();  
+                    if ($('#addDataTable .parent' + (d + 1)).length || $('#addDataTable .parent' + (d - 1)).length) {
+                        var a = $('#addDataTable .parent' + d).nextUntil($('#addDataTable .parent' + (d + 1)));
+                        console.log(a);
+                        a.each((e, element) => {
+                            $(element).remove();
                         });
-                });
+                        $('#addDataTable .parent' + d).remove();
+                        let increase = -1;
+                        $('#addElement0 .col-lg-6').find('.classify').each((inc, deles) => {
+                            if($('#addDataTable .parent' + inc)){
+                                $('#addDataTable .parent' + inc).prop('class', 'parent' + (increase + 1))
+                            }
+                        });
+                    } else {
+                        $('#addDataTable .parent' + d).nextAll().remove();
+                        $('#addDataTable .parent' + d).remove();
+                        $('#addElement1 .col-lg-6').each((ind, val) => {
+                            if ($(val).find('.classify').val().trim()) {
+                                $(val).remove();
+                            }
+                        });
+                        // console.log(arrForm2[(arrForm2.length-1)]);
+                    }
+                }
+                if ($('#addElement0').find('.deleteClassify').length < 2) {
+                    $('#addElement0').children().first().find('.deleteClassify').remove();
+                }
+                autoAddInput();
             });
     });
+
+
+    $('#addElement1').find('.deleteClassify').each((d, vall) => {
+        $(vall)
+            .off('click')
+            .on('click', () => {
+                $(vall).closest('.col-lg-6').remove();
+                $('#addElement1 .col-lg-6').find('.classify').each((de, dele) => {
+                    if ($('#addDataTable .parent' + (de + 1)).length || $('#addDataTable .parent' + (de - 1)).length) {
+                        var a = $('#addDataTable .parent' + de).nextUntil($('#addDataTable .parent' + (de + 1)));
+                        console.log(a);
+                    } else {
+                        if ($('#addDataTable .parent' + de).nextAll().length) {
+                            $('#addDataTable .parent' + de).nextAll().each((c, children) => {
+                                $(children).remove();
+                            });
+                            callBaclValue();
+                            function callBaclValue() {
+                                $('#addElement1 .col-lg-6').find('.classify').each((ins, deles) => {
+                                    if(ins > 0) {
+                                        if($(deles).val().trim()){
+                                            $('#addDataTable .parent' + de).after(tableClassify('', $(deles).val().trim(), 'd-none', '', 'children' + ins));
+                                        }
+                                    }else {
+                                        if(!$(deles).val().trim()){
+                                            !$(deles).closest('.col-lg-6').remove();
+                                            autoAddInput();
+                                            callBaclValue();
+                                            return false;
+                                        }else {
+                                            $('#addDataTable .parent' + de).children(':nth-child(2)').text($(deles).val().trim());
+                                        }
+                                    }
+                                });
+                            }
+                        } else {
+                            if (de == 0) {
+                                $('#addDataTable .parent' + de).children(':nth-child(2)').text($(dele).val().trim())
+                            }
+                        }
+                        // $('#addDataTable .parent' + d).remove();
+                        // $('#addElement1 .col-lg-6').each((ind, val) => {
+                        //     if ($(val).find('.classify').val().trim()) {
+                        //         $(val).remove();
+                        //     }
+                        // });
+                        // console.log(arrForm2[(arrForm2.length-1)]);
+                    }
+                });
+                if ($('#addElement1').find('.deleteClassify').length < 2) {
+                    $('#addElement1').children().first().find('.deleteClassify').remove();
+                }
+                autoAddInput();
+            });
+    });
+
+    // $('.deleteClassify').each((d, vall) => {
+    //     $(vall)
+    //         .off('click')
+    //         .on('click', () => {
+    //             const inputElement = $('.classifyParent');
+    //             inputElement.each((i, val) => {
+    //                 $(val).find('#addElement' + i)
+    //                     .off('click')
+    //                     .on('click', () => {
+    //                         $(val).find(vall).closest('.col-lg-6').remove();
+    //                         // xóa nút xóa biến thể
+    //                         if (i == 0) {
+    //                             console.log(i, d);
+    //                             if ($('#addDataTable .parent' + d).length) {
+    //                                 if (index !== -1) {
+    //                                     arrForm1.splice(arrForm1.indexOf(d), 1); // xóa tại index
+    //                                 }
+    //                                 // let result = $('#addDataTable .parent' + d).nextUntil();  
+    //                                 if ($('#addDataTable .parent' + (d + 1)).length || $('#addDataTable .parent' + (d - 1)).length) {
+    //                                     var a = $('#addDataTable .parent' + d).nextUntil($('#addDataTable .parent' + (d + 1)));
+    //                                     console.log(a);
+    //                                     a.each((e, element) => {
+    //                                         console.log(element);
+    //                                         $(element).remove();
+    //                                     });
+    //                                     $('#addDataTable .parent' + d).remove();
+    //                                 } else {
+    //                                     $('#addDataTable .parent' + d).nextAll().remove();
+    //                                     $('#addDataTable .parent' + d).remove();
+    //                                     $('#addElement1 .col-lg-6').each((ind, val) => {
+    //                                         if ($(val).find('.classify').val().trim()) {
+    //                                             $(val).remove();
+    //                                         }
+    //                                     });
+    //                                     // console.log(arrForm2[(arrForm2.length-1)]);
+    //                                 }
+    //                             }
+
+    //                         }
+    //                         if (i == 1) {
+    //                             console.log(i, d);
+    //                             $('#addElement1 .col-lg-6').find('.classify').each((de, dele) => {
+    //                                 if ($('#addDataTable .parent' + (de + 1)).length || $('#addDataTable .parent' + (de - 1)).length) {
+    //                                     var a = $('#addDataTable .parent' + de).nextUntil($('#addDataTable .parent' + (de + 1)));
+    //                                     console.log(a);
+    //                                     // a.each((e, element) => {
+    //                                     //     console.log(element);
+    //                                     //     $(element).remove();
+    //                                     // });
+    //                                     // $('#addDataTable .parent' + d).remove();
+    //                                 } else {
+    //                                     console.log($('#addDataTable .parent' + de).nextAll());
+    //                                     console.log(arrForm2);
+    //                                     if ($('#addDataTable .parent' + de).nextAll().length) {
+    //                                         $('#addDataTable .parent' + de).nextAll().each((c, children) => {
+    //                                             $(children).remove();
+    //                                         });
+    //                                     } else {
+    //                                         if (de == 0) {
+    //                                             $('#addDataTable .parent' + de).children(':nth-child(2)').text($(val).val().trim())
+    //                                         }
+    //                                     }
+    //                                     // $('#addDataTable .parent' + d).remove();
+    //                                     // $('#addElement1 .col-lg-6').each((ind, val) => {
+    //                                     //     if ($(val).find('.classify').val().trim()) {
+    //                                     //         $(val).remove();
+    //                                     //     }
+    //                                     // });
+    //                                     // console.log(arrForm2[(arrForm2.length-1)]);
+    //                                 }
+    //                             });
+    //                             // $('children')
+    //                         }
+
+    //                         if ($('#addElement' + i).find('.deleteClassify').length < 2) {
+    //                             $('#addElement' + i).children().first().find('.deleteClassify').remove();
+    //                         }
+    //                         autoAddInput();
+    //                     });
+    //             });
+    //         });
+    // });
 }
 
 function formClassify(i) {
@@ -593,7 +799,7 @@ function tableClassify(value1, value2, hidden1, hidden2, location) {
     return `
     
         <tr class="${location}">
-            <td rowspan="" class="text-wrap text-break ${hidden1}" style="max-width: 200px">${value1}</td>
+            <td rowspan="" class="text-wrap text-break ${hidden1} classification_1" style="max-width: 200px">${value1}</td>
             <td class="classification_2 ${hidden2 == '' ? hidden2 : 'd-none'}">${value2}</td>
             <td>
                 <input type="text" name="sellingPrice"
