@@ -370,6 +370,7 @@ $(document).on("click", ".closeFormClassify", function () {
     }
 });
 
+var addDataTable = $('#addDataTable');
 
 
 function deleteColumn() {
@@ -397,8 +398,8 @@ function deleteColumn() {
         $('#formClassify1').find('.classify').each((q, value) => {
             if ($(value).val().trim()) {
                 if (q == 0) {
-                    console.log($('#addDataTable').empty());
-                    $('#addDataTable').append(tableClassify($(value).val(), '', '', 'd-none', 'parent' + q));
+                    addDataTable.empty();
+                    addDataTable.append(tableClassify($(value).val(), '', '', 'd-none', 'parent' + q));
                     arrForm1.push(q);
                 } else {
                     $('.parent' + (q - 1)).after(tableClassify($(value).val(), '', '', 'd-none', 'parent' + q));
@@ -533,7 +534,6 @@ function handleDeleteClassify() {
                     if (index !== -1) {
                         arrForm1.splice(arrForm1.indexOf(d), 1); // xóa tại index
                     }
-                    // let result = $('#addDataTable .parent' + d).nextUntil();  
                     if ($('#addDataTable .parent' + (d + 1)).length || $('#addDataTable .parent' + (d - 1)).length) {
                         var a = $('#addDataTable .parent' + d).nextUntil($('#addDataTable .parent' + (d + 1)));
                         console.log(a);
@@ -555,7 +555,6 @@ function handleDeleteClassify() {
                                 $(val).remove();
                             }
                         });
-                        // console.log(arrForm2[(arrForm2.length-1)]);
                     }
                 }
                 if ($('#addElement0').find('.deleteClassify').length < 2) {
@@ -566,143 +565,98 @@ function handleDeleteClassify() {
     });
 
 
-    $('#addElement1').find('.deleteClassify').each((d, vall) => {
-        $(vall)
-            .off('click')
-            .on('click', () => {
-                $(vall).closest('.col-lg-6').remove();
-                $('#addElement1 .col-lg-6').find('.classify').each((de, dele) => {
-                    if ($('#addDataTable .parent' + (de + 1)).length || $('#addDataTable .parent' + (de - 1)).length) {
-                        var a = $('#addDataTable .parent' + de).nextUntil($('#addDataTable .parent' + (de + 1)));
-                        console.log(a);
-                    } else {
-                        if ($('#addDataTable .parent' + de).nextAll().length) {
-                            $('#addDataTable .parent' + de).nextAll().each((c, children) => {
-                                $(children).remove();
+    function addElement1() {
+        $('#addElement1').find('.deleteClassify').each((d, vall) => {
+            $(vall)
+                .off('click')
+                .on('click', () => {
+                    $(vall).closest('.col-lg-6').remove();
+                    if(arrForm1.length >= 2) {
+                        var lengthRow = $('#addElement1 .col-lg-6').find('.classify').filter(function () {return $(this).val().trim() !== "";}).length;
+                        addDataTable.find('.classification_1').each((n, element)=> {
+                            if(lengthRow == 1){
+                                $(element).prop('rowspan', 1);
+                            }else {
+                                $(element).prop('rowspan', (lengthRow));
+                            }
+                            // const lengthClassify1 = arrForm1.length;
+                            // for(var i = 0; i < lengthClassify1; i++) {
+                            //     var a = $('#addDataTable .parent' + i).nextUntil($('#addDataTable .parent' + (i + 1)));
+                            //     console.log(a);
+                            // }
+                        });
+                        console.log(d);
+                        if(d != 0){
+                            addDataTable.find('.children' + d).each((c, child)=> {
+                                $(child).remove();
                             });
-                            callBaclValue();
-                            function callBaclValue() {
-                                $('#addElement1 .col-lg-6').find('.classify').each((ins, deles) => {
-                                    if(ins > 0) {
-                                        if($(deles).val().trim()){
-                                            $('#addDataTable .parent' + de).after(tableClassify('', $(deles).val().trim(), 'd-none', '', 'children' + ins));
-                                        }
-                                    }else {
-                                        if(!$(deles).val().trim()){
-                                            !$(deles).closest('.col-lg-6').remove();
-                                            autoAddInput();
-                                            callBaclValue();
-                                            return false;
-                                        }else {
-                                            $('#addDataTable .parent' + de).children(':nth-child(2)').text($(deles).val().trim());
-                                        }
-                                    }
-                                });
+                            const lengthClassify1 = arrForm1.length;
+                            for(var i = 0; i < lengthClassify1; i++) {
+                                var a = $('#addDataTable .parent' + i).nextUntil($('#addDataTable .parent' + (i + 1)));
+                                console.log(a);
                             }
-                        } else {
-                            if (de == 0) {
-                                $('#addDataTable .parent' + de).children(':nth-child(2)').text($(dele).val().trim())
-                            }
+                        }else {
+                            addDataTable.find('.children1').each((c, child)=> {
+                                $('#addDataTable .parent' + c).children(':nth-child(2)').text($(child).children(':nth-child(2)').text());
+                                $(child).remove();
+                                const lengthClassify1 = arrForm1.length;
+                                for(var i = 0; i < lengthClassify1; i++) {
+                                    var a = $('#addDataTable .parent' + i).nextUntil($('#addDataTable .parent' + (i + 1)));
+                                    console.log(a);
+                                }
+                                addElement1();
+                                return false;
+                            });
                         }
-                        // $('#addDataTable .parent' + d).remove();
-                        // $('#addElement1 .col-lg-6').each((ind, val) => {
-                        //     if ($(val).find('.classify').val().trim()) {
-                        //         $(val).remove();
-                        //     }
-                        // });
-                        // console.log(arrForm2[(arrForm2.length-1)]);
                     }
+    
+                    $('#addElement1 .col-lg-6').find('.classify').each((de, dele) => {
+                        if ($('#addDataTable .parent' + (de + 1)).length || $('#addDataTable .parent' + (de - 1)).length) {
+                            
+                        } else {
+                            if ($('#addDataTable .parent' + de).nextAll().length) {
+                                $('#addDataTable .parent' + de).nextAll().each((c, children) => {
+                                    $(children).remove();
+                                });
+                                callBaclValue();
+                                function callBaclValue() {
+                                    $('#addElement1 .col-lg-6').find('.classify').each((ins, deles) => {
+                                        if(ins > 0) {
+                                            if($(deles).val().trim()){
+                                                $('#addDataTable .parent' + de).after(tableClassify('', $(deles).val().trim(), 'd-none', '', 'children' + ins));
+                                            }
+                                        }else {
+                                            if(!$(deles).val().trim()){
+                                                !$(deles).closest('.col-lg-6').remove();
+                                                autoAddInput();
+                                                callBaclValue();
+                                                return false;
+                                            }else {
+                                                $('#addDataTable .parent' + de).children(':nth-child(2)').text($(deles).val().trim());
+                                            }
+                                        }
+                                    });
+                                }
+                            } else {
+                                if (de == 0) {
+                                    $('#addDataTable .parent' + de).children(':nth-child(2)').text($(dele).val().trim())
+                                }
+                            }
+                        }    
+                    });
+                    if ($('#addElement1').find('.deleteClassify').length < 2) {
+                        $('#addElement1').children().first().find('.deleteClassify').remove();
+                    }
+                    autoAddInput();
                 });
-                if ($('#addElement1').find('.deleteClassify').length < 2) {
-                    $('#addElement1').children().first().find('.deleteClassify').remove();
-                }
-                autoAddInput();
-            });
-    });
+        });
+    }
 
-    // $('.deleteClassify').each((d, vall) => {
-    //     $(vall)
-    //         .off('click')
-    //         .on('click', () => {
-    //             const inputElement = $('.classifyParent');
-    //             inputElement.each((i, val) => {
-    //                 $(val).find('#addElement' + i)
-    //                     .off('click')
-    //                     .on('click', () => {
-    //                         $(val).find(vall).closest('.col-lg-6').remove();
-    //                         // xóa nút xóa biến thể
-    //                         if (i == 0) {
-    //                             console.log(i, d);
-    //                             if ($('#addDataTable .parent' + d).length) {
-    //                                 if (index !== -1) {
-    //                                     arrForm1.splice(arrForm1.indexOf(d), 1); // xóa tại index
-    //                                 }
-    //                                 // let result = $('#addDataTable .parent' + d).nextUntil();  
-    //                                 if ($('#addDataTable .parent' + (d + 1)).length || $('#addDataTable .parent' + (d - 1)).length) {
-    //                                     var a = $('#addDataTable .parent' + d).nextUntil($('#addDataTable .parent' + (d + 1)));
-    //                                     console.log(a);
-    //                                     a.each((e, element) => {
-    //                                         console.log(element);
-    //                                         $(element).remove();
-    //                                     });
-    //                                     $('#addDataTable .parent' + d).remove();
-    //                                 } else {
-    //                                     $('#addDataTable .parent' + d).nextAll().remove();
-    //                                     $('#addDataTable .parent' + d).remove();
-    //                                     $('#addElement1 .col-lg-6').each((ind, val) => {
-    //                                         if ($(val).find('.classify').val().trim()) {
-    //                                             $(val).remove();
-    //                                         }
-    //                                     });
-    //                                     // console.log(arrForm2[(arrForm2.length-1)]);
-    //                                 }
-    //                             }
+    addElement1();
 
-    //                         }
-    //                         if (i == 1) {
-    //                             console.log(i, d);
-    //                             $('#addElement1 .col-lg-6').find('.classify').each((de, dele) => {
-    //                                 if ($('#addDataTable .parent' + (de + 1)).length || $('#addDataTable .parent' + (de - 1)).length) {
-    //                                     var a = $('#addDataTable .parent' + de).nextUntil($('#addDataTable .parent' + (de + 1)));
-    //                                     console.log(a);
-    //                                     // a.each((e, element) => {
-    //                                     //     console.log(element);
-    //                                     //     $(element).remove();
-    //                                     // });
-    //                                     // $('#addDataTable .parent' + d).remove();
-    //                                 } else {
-    //                                     console.log($('#addDataTable .parent' + de).nextAll());
-    //                                     console.log(arrForm2);
-    //                                     if ($('#addDataTable .parent' + de).nextAll().length) {
-    //                                         $('#addDataTable .parent' + de).nextAll().each((c, children) => {
-    //                                             $(children).remove();
-    //                                         });
-    //                                     } else {
-    //                                         if (de == 0) {
-    //                                             $('#addDataTable .parent' + de).children(':nth-child(2)').text($(val).val().trim())
-    //                                         }
-    //                                     }
-    //                                     // $('#addDataTable .parent' + d).remove();
-    //                                     // $('#addElement1 .col-lg-6').each((ind, val) => {
-    //                                     //     if ($(val).find('.classify').val().trim()) {
-    //                                     //         $(val).remove();
-    //                                     //     }
-    //                                     // });
-    //                                     // console.log(arrForm2[(arrForm2.length-1)]);
-    //                                 }
-    //                             });
-    //                             // $('children')
-    //                         }
-
-    //                         if ($('#addElement' + i).find('.deleteClassify').length < 2) {
-    //                             $('#addElement' + i).children().first().find('.deleteClassify').remove();
-    //                         }
-    //                         autoAddInput();
-    //                     });
-    //             });
-    //         });
-    // });
 }
+
+
 
 function formClassify(i) {
     return `
