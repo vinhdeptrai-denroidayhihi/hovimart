@@ -48,6 +48,13 @@
         width: 100% !important;
     }
     .setWidthInput {
-        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .core {
+        width: 100%;
+    }
+
+    .setWidthInputShip{
+        max-width: 100% !important;
     }
 }
