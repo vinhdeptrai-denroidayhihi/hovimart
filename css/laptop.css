@@ -223,3 +223,24 @@
 
 /* kết thúc css thông tin chi tiết khách hàng */
 
+/* Css product */
+
+#btnToggerTransport {
+    top: 0;
+    left: 0px;
+    border: 1px solid #999;
+}
+
+.setWidthInput {
+    max-width: 400px;
+}
+
+.setWidthInputShip{
+    max-width: 250px;
+}
+
+.setStytleInput {
+    font-size: 15px; 
+    height: 35px; 
+    padding-right: 50px !important;
+}

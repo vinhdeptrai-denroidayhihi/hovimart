@@ -466,7 +466,7 @@
                                             <input type="text" name="productName"
                                                 placeholder="Tên sản phẩm + Thương hiệu + Model + Thông số kỹ thuật"
                                                 class="w-100 inputBorder rounded-2 px-2"
-                                                style="font-size: 15px; height: 35px; padding-right: 50px !important;">
+                                                style="">
                                         </div>
                                     </div>
                                 </div>
@@ -484,7 +484,7 @@
                                                 style="font-size: 14px;"><i class="fa-solid fa-pen"></i></div>
                                             <input type="text" name="productCategory" placeholder="Chọn ngành hàng"
                                                 readonly class="w-100 inputBorder rounded-2 px-2"
-                                                style="font-size: 15px; height: 35px; padding-right: 50px !important; cursor: pointer;">
+                                                style=" cursor: pointer;">
                                         </div>
                                     </div>
                                 </div>
@@ -503,7 +503,7 @@
                                             <input type="text" name="productBrand" id="productBrand"
                                                 placeholder="Chọn thương hiệu" readonly value=""
                                                 class="w-100 inputBorder rounded-2 px-2"
-                                                style="font-size: 15px; height: 35px; padding-right: 50px !important; cursor: pointer;">
+                                                style=" cursor: pointer;">
                                             <div class="selectItem position-absolute top-100 start-0 end-0 shadow overflow-auto scroll rounded-bottom-1 d-none"
                                                 style="background-color: #fff6f6; max-height: 160px;">
                                                 <div class="ps-2 py-1 w-100 active transition" data-value="Nam"
@@ -534,7 +534,7 @@
                                             </div>
                                             <input type="text" name="productName"
                                                 class="w-100 inputBorder rounded-2 px-2"
-                                                style="font-size: 15px; height: 35px; padding-right: 50px !important;">
+                                                style="">
                                         </div>
                                     </div>
                                 </div>
@@ -554,7 +554,7 @@
                                             </div>
                                             <input type="text" name="productName"
                                                 class="w-100 inputBorder rounded-2 px-2"
-                                                style="font-size: 15px; height: 35px; padding-right: 50px !important;">
+                                                style="">
                                         </div>
                                     </div>
                                 </div>
@@ -625,8 +625,8 @@
                             <div class="col-lg-2 col-12">Phân loại hàng</div>
                             <div class="col-lg-10 col-12">
                                 <!-- thêm giá nhập -->
-                                <div class="d-md-flex mt-3 mt-md-0" id="">
-                                    <div class="w-25 ms-2 d-flex justify-content-center align-items-center rounded-pill text-white hoverBtn"
+                                <div class="d-flex justify-content-center mt-3 mt-md-0 mx-3 mx-md-0 setWidthInput" id="">
+                                    <div class="w-100 ms-2 ms-md-0 d-flex justify-content-center align-items-center rounded-pill text-white hoverBtn"
                                         id="addClassifyProduct"
                                         style="background-color: #EB8D2C; height: 35px; cursor: pointer;">
                                         Thêm phân loại<ion-icon name="add-outline"></ion-icon>
@@ -636,17 +636,22 @@
                             </div>
                         </div>
 
-                        <div class="" id="formPrice">
+                        <div class="pe-md-5" id="formPrice">
                             <div class="row mx-4 mt-5">
                                 <div class="col-lg-2 col-12">Giá nhập<span class="text-danger">*</span></div>
                                 <div class="col-lg-10 col-12">
                                     <!-- thêm giá nhập -->
                                     <div class="d-md-flex" id="">
-                                        <div class="w-100 ps-2 pe-md-5">
-                                            <div class="m-2 m-md-0">
-                                                <input type="text" name="importPrice" placeholder="0"
-                                                    class="w-50 inputBorder rounded-2 px-2"
-                                                    style="font-size: 15px; height: 35px; padding-right: 50px !important;">
+                                        <div class="w-100 ps-2">
+                                            <div class="position-relative m-2 m-md-0">
+                                                <div class="position-relative setWidthInput">
+                                                    <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                                        style="font-size: 15px;">đ
+                                                    </div>
+                                                    <input type="text" name="importPrice" id="importPrice" placeholder="0"
+                                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                        maxlength="20" class="w-100 inputBorder rounded-2 px-2 setStytleInput">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -658,11 +663,16 @@
                                 <div class="col-lg-10 col-12">
                                     <!-- thêm giá lợi nhuận -->
                                     <div class="d-md-flex" id="">
-                                        <div class="w-100 ps-2 pe-md-5">
-                                            <div class="m-2 m-md-0">
-                                                <input type="text" name="profit" class="w-50 inputBorder rounded-2 px-2"
-                                                    placeholder="0"
-                                                    style="font-size: 15px; height: 35px; padding-right: 50px !important;">
+                                        <div class="w-100 ps-2">
+                                            <div class="position-relative m-2 m-md-0">
+                                                <div class="position-relative setWidthInput">
+                                                    <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                                        style="font-size: 15px;">đ
+                                                    </div>
+                                                    <input type="text" name="profit" id="profit" class="w-100 inputBorder rounded-2 px-2 setStytleInput"
+                                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                        maxlength="20" placeholder="0">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -674,11 +684,19 @@
                                 <div class="col-lg-10 col-12">
                                     <!-- thêm giá bán -->
                                     <div class="d-md-flex" id="">
-                                        <div class="w-100 ps-2 pe-md-5">
-                                            <div class="m-2 m-md-0">
-                                                <input type="text" name="sellingPrice" readonly 
-                                                    class="w-50 rounded-2 px-2 border-1 border-secondary opacity-50" placeholder="0"
-                                                    style="font-size: 15px; height: 35px; padding-right: 50px !important; outline: none;">
+                                        <div class="w-100 ps-2">
+                                            <div class=" m-2 m-md-0">
+                                                <div class="position-relative setWidthInput">
+                                                    <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                                        style="font-size: 15px;">đ
+                                                    </div>
+                                                    <input type="text" name="sellingPrice" id="sellingPrice" readonly
+                                                        class="rounded-2 px-2 border-1 border-secondary w-100 opacity-50 setStytleInput"
+                                                        placeholder="0"
+                                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                        maxlength="20"
+                                                        style=" outline: none;">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -690,11 +708,12 @@
                                 <div class="col-lg-10 col-12">
                                     <!-- thêm số lượng kho -->
                                     <div class="d-md-flex" id="">
-                                        <div class="w-100 ps-2 pe-md-5">
+                                        <div class="w-100 ps-2">
                                             <div class="m-2 m-md-0">
-                                                <input type="text" name="warehouse"
-                                                    class="w-50 inputBorder rounded-2 px-2" placeholder="0"
-                                                    style="font-size: 15px; height: 35px; padding-right: 50px !important;">
+                                                <input type="text" name="warehouse" id="warehouse"
+                                                    class="inputBorder w-100 rounded-2 px-2 setStytleInput setWidthInput" placeholder="0"
+                                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                    maxlength="20">
                                             </div>
                                         </div>
                                     </div>
@@ -709,10 +728,10 @@
 
                             </div>
                         </div>
-                        
-    
+
+
                         <div class="bg-secondary bg-opacity-10 rounded-2 m-4 d-none" id="tableClassify">
-                            <div class="d-flex justify-content-center flex-wrap p-5 ">
+                            <div class="d-flex justify-content-center flex-wrap p-5 " id="inputAll">
                                 <div class="p-2 d-flex justify-content-center">
                                     <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                         maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
@@ -728,28 +747,28 @@
                                         maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
                                         placeholder="Kho">
                                 </div>
-                                <div class="p-2 d-flex justify-content-center">
+                                <div class="p-2 d-flex justify-content-center transport">
                                     <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                         maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
                                         placeholder="Cân nặng">
                                 </div>
-                                <div class="p-2 d-flex justify-content-center">
+                                <div class="p-2 d-flex justify-content-center transport">
                                     <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                         maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
                                         placeholder="Dài|L(cm)">
                                 </div>
-                                <div class="p-2 d-flex justify-content-center">
+                                <div class="p-2 d-flex justify-content-center transport">
                                     <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                         maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
                                         placeholder="Rộng|W(cm)">
                                 </div>
-                                <div class="p-2 d-flex justify-content-center">
+                                <div class="p-2 d-flex justify-content-center transport">
                                     <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                         maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
                                         placeholder="Cao|H(cm)">
                                 </div>
                                 <div class="p-2 d-flex justify-content-center">
-                                    <button type="button" class="rounded-2 inputBorder text-white hoverBtn"
+                                    <button type="button" class="rounded-2 inputBorder text-white hoverBtn applyToAll"
                                         style="height: 35px; min-width: 191px; background-color: #EB8D2C;">Áp
                                         dụng</button>
                                 </div>
@@ -759,26 +778,108 @@
                                     <table class="w-100 table table-bordered text-center align-middle">
                                         <thead>
                                             <tr>
-                                                <th class="text-nowrap classify_1 classification_1" style="min-width: 150px;">Phân loại 1</th>
-                                                <th class="text-nowrap classify_2 classification_2 d-none" style="min-width: 150px;">Phân loại 2</th>
+                                                <th class="text-nowrap classify_1 classification_1"
+                                                    style="min-width: 150px;">Phân loại 1</th>
+                                                <th class="text-nowrap classify_2 classification_2 d-none"
+                                                    style="min-width: 150px;">Phân loại 2</th>
                                                 <th class="text-nowrap">Giá bán</th>
                                                 <th class="text-nowrap">Lợi nhuận</th>
                                                 <th class="text-nowrap">Giá nhập</th>
                                                 <th class="text-nowrap">Kho</th>
-                                                <th class="transpotClassify text-nowrap">Cân nặng</th>
-                                                <th class="transpotClassify text-nowrap">Chiều dài</th>
-                                                <th class="transpotClassify text-nowrap">Chiều rộng</th>
-                                                <th class="transpotClassify text-nowrap">Chiều cao</th>
+                                                <th class="transpotClassify text-nowrap transport">Cân nặng</th>
+                                                <th class="transpotClassify text-nowrap transport">Chiều dài</th>
+                                                <th class="transpotClassify text-nowrap transport">Chiều rộng</th>
+                                                <th class="transpotClassify text-nowrap transport">Chiều cao</th>
                                             </tr>
                                         </thead>
                                         <tbody id="addDataTable">
-                                            
+
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                        <!-- kết thúc thêm phâm loại hàng -->
+                    </div>
+                    <!-- kết thúc thêm phâm loại hàng -->
+                    <div class="bg-white mt-3 pb-5 pe-md-5">
+                        <div class="p-3 fs-5 pt-4 d-flex align-items-center">
+                            <div class="me-5">Vận chuyển</div>
+                            <div class="bg-danger rounded-pill position-relative" id="btnToggerTransportClick" style="width: 50px;height: 22px; cursor: pointer;">
+                                <div class="position-absolute rounded-pill bg-white transition" id="btnToggerTransport" style="width: 25px;height: 22px; "></div>
+                            </div>
+                        </div>
+                        <div class="" id="formTransport">
+                            <div class="row mx-4 mt-4">
+                                <div class="col-lg-2 col-12">Cân nặng<span class="text-danger">*</span></div>
+                                <div class="col-lg-10 col-12">
+                                    <div class="d-md-flex ps-2" id="">
+                                        <div class="position-relative w-100 m-2 m-md-0 setWidthInput">
+                                            <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                                style="font-size: 15px;">g
+                                            </div>
+                                            <input type="text" name="weight" id="weight"
+                                                class="transpotClassify w-100 px-1 rounded-2 inputBorder"
+                                                style="height: 35px;" placeholder="Cân nặng (gram)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-5 mx-4 p-0">
+                                <div class="col-lg-2 col-12">Kích thước</div>
+                                <div class="col-lg-10 col-12">
+                                    <!-- thêm thông tin vận chuyển -->
+                                    <div class="ps-2 w-100 d-flex flex-wrap">
+                                        <div class="">
+                                            <div class="d-md-flex" id="">
+                                                <div class="position-relative w-100 m-2 m-md-0 setWidthInputShip">
+                                                    <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                                        style="font-size: 15px;">cm
+                                                    </div>
+                                                    <input type="text" name="length" id="length"
+                                                        class="transpotClassify w-100 px-1 rounded-2 inputBorder"
+                                                        style="height: 35px;" placeholder="Chiều dài (cm)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-2 py-md-0 px-md-2 p-md-0 px-2 d-flex align-items-center">
+                                            <div class="w-100 fs-4 d-flex justify-content-center align-items-center m-2 m-md-0" id="">
+                                                x
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <div class="d-md-flex" id="">
+                                                <div class="position-relative w-100 m-2 m-md-0 setWidthInputShip">
+                                                    <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                                        style="font-size: 15px;">cm
+                                                    </div>
+                                                    <input type="text" name="width" id="width"
+                                                        class="transpotClassify w-100 px-1 rounded-2 inputBorder"
+                                                        style="height: 35px;" placeholder="Chiều rộng (cm)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-2 py-md-0 px-md-2 d-flex align-items-center">
+                                            <div class="w-100 fs-4 d-flex justify-content-center align-items-center m-2 m-md-0" id="">
+                                                x
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <div class="d-md-flex" id="">
+                                                <div class="position-relative w-100 m-2 m-md-0 setWidthInputShip">
+                                                    <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                                        style="font-size: 15px;">cm
+                                                    </div>
+                                                    <input type="text" name="height" id="height"
+                                                        class="transpotClassify w-100 px-1 rounded-2 inputBorder"
+                                                        style="height: 35px;" placeholder="Chiều cao (cm)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- kết thúc thêm thông tin vận chuyển-->
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

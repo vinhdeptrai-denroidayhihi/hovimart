@@ -39,4 +39,15 @@
     #info-Header {
         max-width: none;
     }
+
+    .ck-editor__editable[role="textbox"] {
+        min-height: 400px;
+    }
+    
+    .setStytleInput {
+        width: 100% !important;
+    }
+    .setWidthInput {
+        width: 100% !important;
+    }
 }

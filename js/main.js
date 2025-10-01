@@ -325,7 +325,7 @@ function setDateInput(value) {
     });
 };
 
-// set value cho intput khi chọn các option
+// kết thúc set value cho intput khi chọn các option
 
 
 // thêm phân loại cho sản phẩm
@@ -345,6 +345,8 @@ $('#addClassifyProduct').click(() => {
         handleDeleteClassify();//gọi hàm xóa biến thể
         autoAddInput();//gọi hàm khởi đông tạo biến thể
         handleEventAddClassify();//gọi hàm xử lý value classify
+        setValueInputTable();
+        formSetValueAll();
     }
 });
 
@@ -356,6 +358,9 @@ $(document).on("click", ".closeFormClassify", function () {
         $('#addClassify').addClass('d-none');
         $('#tableClassify').addClass('d-none');
         $('#formPrice').removeClass('d-none');
+        $('.classify_1').text('Phân loại 1');
+        addDataTable.empty();
+        arrForm1 = [];
     } else {
         $('#addClassify .classifyParent').find('.titleClassify').text('Phân loại 1');
         $('#addClassify .classifyParent').find('.classifyName').prop('name', 'classifyName' + 0);
@@ -372,12 +377,13 @@ $(document).on("click", ".closeFormClassify", function () {
 
 var addDataTable = $('#addDataTable');
 
-
+//xóa cột phân loại
 function deleteColumn() {
     if ($('#formClassify1').length) {
         $('.classification_1').each((i, v) => {
             if ($('#formClassify1').find('.classifyName').val().trim()) {
                 $('.classify_1').text($('#formClassify1').find('.classifyName').val());
+                $('.classification_2').text('Phân loại 2');
             } else {
                 $('.classify_1').text('Phân loại 1');
             }
@@ -428,7 +434,9 @@ function deleteColumn() {
         })
     }
 }
+// kết thúc xóa cột phân loại
 
+// tự động tăng input
 function autoAddInput() {
 
     const inputElement = $('.classifyParent');
@@ -449,58 +457,60 @@ var indexInput = 0;
 function recursionInput(r) {
     indexInput = r;
     var length = $('#addElement' + r + ' .col-lg-6').length - 1;
-    console.log('leng ',length);
     $('#addElement' + r + ' .col-lg-6').each((j, value) => {
         // if (j == length) {
-            $(value).find('.classify')
-                .off('input')
-                .on('input', () => {
-                    var i = indexInput;
-                    console.log(i, j);
-                    if ($(value).find('.classify').val().trim()) {
-                        if (i == 0) {
-                            if ($('#addDataTable .parent' + j).length) {
-                                $('#addDataTable .parent' + j).children().first().text($(value).find('.classify').val().trim());
+        $(value).find('.classify')
+            .off('input')
+            .on('input', () => {
+                var i = indexInput;
+                if ($(value).find('.classify').val().trim()) {
+                    if (i == 0) {
+                        if ($('#addDataTable .parent' + j).length) {
+                            $('#addDataTable .parent' + j).children().first().text($(value).find('.classify').val().trim());
+                        } else {
+                            if ($('#formClassify1').length) {
+                                $('#addDataTable').append(tableClassify($(value).find('.classify').val().trim(), '', '', '', 'parent' + j));
                             } else {
-                                if ($('#formClassify1').length) {
-                                    $('#addDataTable').append(tableClassify($(value).find('.classify').val().trim(), '', '', '', 'parent' + j));
-                                } else {
-                                    $('#addDataTable').append(tableClassify($(value).find('.classify').val().trim(), '', '', 'd', 'parent' + j));
-                                }
-                                if ($('#addElement' + 1).length) {
-                                    $('#addElement' + 1 + ' .col-lg-6').each((e, value) => {
-                                        if ($(value).find('.classify').val()) {
-                                            if (e == 0) {
-                                                $('#addDataTable .parent' + j).children(':nth-child(2)').text($(value).find('.classify').val().trim());
-                                            } else {
-                                                $('#addDataTable .parent' + j).after(tableClassify('', $(value).find('.classify').val().trim(), 'd-none', '', 'children' + j));
-                                                $('#addDataTable .parent' + j).children().first().prop('rowspan', (e + 1));
-                                            }
+                                $('#addDataTable').append(tableClassify($(value).find('.classify').val().trim(), '', '', 'd', 'parent' + j));
+                            }
+                            if ($('#addElement' + 1).length) {
+                                $('#addElement' + 1 + ' .col-lg-6').each((e, value) => {
+                                    if ($(value).find('.classify').val()) {
+                                        if (e == 0) {
+                                            $('#addDataTable .parent' + j).children(':nth-child(2)').text($(value).find('.classify').val().trim());
+                                        } else {
+                                            console.log();
+                                            $('#addDataTable .parent' + j).after(tableClassify('', $(value).find('.classify').val().trim(), 'd-none', '', 'children' + e));
+                                            $('#addDataTable .parent' + j).children().first().prop('rowspan', (e + 1));
                                         }
-                                    });
-                                }
-                                arrForm1.push(j);
+                                    }
+                                });
                             }
-                        }
-                        if (i == 1) {
-                            setValueTable(j, value);
-                            arrForm2.push(j);
-                        }
-                        if (j == $('#addElement' + i + ' .col-lg-6').length - 1) {
-                            $('#addElement' + i).append(inputElementText(i));
-                            // thêm nút xóa biến thể đầu tiên
-                            if ($('#addElement' + i).find('.deleteClassify').length < 2) {
-                                const iconDeletClassify = '<ion-icon class="ms-3 deleteClassify" style="font-size: 25px; color: rgb(182, 127, 127); cursor: pointer;" name="trash-outline"></ion-icon>';
-                                $('#addElement' + i).children().first().find('.addDelete').append(iconDeletClassify);
-                            }
-                            handleDeleteClassify();//gọi hàm xóa biến thể
-                            autoAddInput();// hàm gọi tạo biến thể (Đệ quy)
+                            arrForm1.push(j);
                         }
                     }
-                });
+                    if (i == 1) {
+                        setValueTable(j, value);
+                        arrForm2.push(j);
+                    }
+                    if (j == $('#addElement' + i + ' .col-lg-6').length - 1) {
+                        $('#addElement' + i).append(inputElementText(i));
+                        // thêm nút xóa biến thể đầu tiên
+                        if ($('#addElement' + i).find('.deleteClassify').length < 2) {
+                            const iconDeletClassify = '<ion-icon class="ms-3 deleteClassify" style="font-size: 25px; color: rgb(182, 127, 127); cursor: pointer;" name="trash-outline"></ion-icon>';
+                            $('#addElement' + i).children().first().find('.addDelete').append(iconDeletClassify);
+                        }
+                        handleDeleteClassify();//gọi hàm xóa biến thể
+                        autoAddInput();// hàm gọi tạo biến thể 
+                    }
+                    loopSetValueInput();
+                }
+            });
         // }
     });
 }
+
+// kết thúc tự động tăng input
 
 function setValueTable(j, value) {
     $(value).find('.classify').each((v, values) => {
@@ -508,7 +518,6 @@ function setValueTable(j, value) {
             if ($('#addDataTable .children' + j).length) {
                 $('#addDataTable .children' + j).children(':nth-child(2)').text($(values).val().trim());
             } else {
-                console.log(j);
                 if (j == 0) {
                     arrForm1.forEach((element, e) => {
                         $('#addDataTable .parent' + e).children(':nth-child(2)').text($(values).val().trim())
@@ -523,6 +532,8 @@ function setValueTable(j, value) {
         }
     })
 }
+
+// xóa input
 
 function handleDeleteClassify() {
     $('#addElement0').find('.deleteClassify').each((d, vall) => {
@@ -543,7 +554,7 @@ function handleDeleteClassify() {
                         $('#addDataTable .parent' + d).remove();
                         let increase = -1;
                         $('#addElement0 .col-lg-6').find('.classify').each((inc, deles) => {
-                            if($('#addDataTable .parent' + inc)){
+                            if ($('#addDataTable .parent' + inc)) {
                                 $('#addDataTable .parent' + inc).prop('class', 'parent' + (increase + 1))
                             }
                         });
@@ -571,48 +582,42 @@ function handleDeleteClassify() {
                 .off('click')
                 .on('click', () => {
                     $(vall).closest('.col-lg-6').remove();
-                    if(arrForm1.length >= 2) {
-                        var lengthRow = $('#addElement1 .col-lg-6').find('.classify').filter(function () {return $(this).val().trim() !== "";}).length;
-                        addDataTable.find('.classification_1').each((n, element)=> {
-                            if(lengthRow == 1){
+                    if (arrForm1.length >= 2) {
+                        var lengthRow = $('#addElement1 .col-lg-6').find('.classify').filter(function () { return $(this).val().trim() !== ""; }).length;
+                        addDataTable.find('.classification_1').each((n, element) => {
+                            if (lengthRow == 1 || lengthRow == 0) {
                                 $(element).prop('rowspan', 1);
-                            }else {
+                            } else {
                                 $(element).prop('rowspan', (lengthRow));
                             }
-                            // const lengthClassify1 = arrForm1.length;
-                            // for(var i = 0; i < lengthClassify1; i++) {
-                            //     var a = $('#addDataTable .parent' + i).nextUntil($('#addDataTable .parent' + (i + 1)));
-                            //     console.log(a);
-                            // }
                         });
-                        console.log(d);
-                        if(d != 0){
-                            addDataTable.find('.children' + d).each((c, child)=> {
+                        if (d != 0) {
+                            addDataTable.find('.children' + d).each((c, child) => {
                                 $(child).remove();
                             });
                             const lengthClassify1 = arrForm1.length;
-                            for(var i = 0; i < lengthClassify1; i++) {
+                            for (var i = 0; i < lengthClassify1; i++) {
                                 var a = $('#addDataTable .parent' + i).nextUntil($('#addDataTable .parent' + (i + 1)));
-                                console.log(a);
                             }
-                        }else {
-                            addDataTable.find('.children1').each((c, child)=> {
+                        } else {
+                            addDataTable.find('.children1').each((c, child) => {
                                 $('#addDataTable .parent' + c).children(':nth-child(2)').text($(child).children(':nth-child(2)').text());
                                 $(child).remove();
-                                const lengthClassify1 = arrForm1.length;
-                                for(var i = 0; i < lengthClassify1; i++) {
-                                    var a = $('#addDataTable .parent' + i).nextUntil($('#addDataTable .parent' + (i + 1)));
-                                    console.log(a);
-                                }
-                                addElement1();
-                                return false;
                             });
+                            let children = 1;
+                            let lengthInput = $('#addElement1 .col-lg-6').length;
+                            for (let i = 2; i <= lengthInput; i++) {
+                                $('.children' + i).each((n, val) => {
+                                    $(val).prop('class', ('children' + children));
+                                });
+                                children++;
+                            }
                         }
                     }
-    
+
                     $('#addElement1 .col-lg-6').find('.classify').each((de, dele) => {
                         if ($('#addDataTable .parent' + (de + 1)).length || $('#addDataTable .parent' + (de - 1)).length) {
-                            
+
                         } else {
                             if ($('#addDataTable .parent' + de).nextAll().length) {
                                 $('#addDataTable .parent' + de).nextAll().each((c, children) => {
@@ -621,17 +626,17 @@ function handleDeleteClassify() {
                                 callBaclValue();
                                 function callBaclValue() {
                                     $('#addElement1 .col-lg-6').find('.classify').each((ins, deles) => {
-                                        if(ins > 0) {
-                                            if($(deles).val().trim()){
+                                        if (ins > 0) {
+                                            if ($(deles).val().trim()) {
                                                 $('#addDataTable .parent' + de).after(tableClassify('', $(deles).val().trim(), 'd-none', '', 'children' + ins));
                                             }
-                                        }else {
-                                            if(!$(deles).val().trim()){
+                                        } else {
+                                            if (!$(deles).val().trim()) {
                                                 !$(deles).closest('.col-lg-6').remove();
                                                 autoAddInput();
                                                 callBaclValue();
                                                 return false;
-                                            }else {
+                                            } else {
                                                 $('#addDataTable .parent' + de).children(':nth-child(2)').text($(deles).val().trim());
                                             }
                                         }
@@ -642,12 +647,13 @@ function handleDeleteClassify() {
                                     $('#addDataTable .parent' + de).children(':nth-child(2)').text($(dele).val().trim())
                                 }
                             }
-                        }    
+                        }
                     });
                     if ($('#addElement1').find('.deleteClassify').length < 2) {
                         $('#addElement1').children().first().find('.deleteClassify').remove();
                     }
                     autoAddInput();
+                    addElement1();
                 });
         });
     }
@@ -656,6 +662,7 @@ function handleDeleteClassify() {
 
 }
 
+// kết thúc xóa input
 
 
 function formClassify(i) {
@@ -723,8 +730,7 @@ function inputElementText(i) {
 }
 
 
-// Thêm phân loại
-
+// Thêm form phân loại
 
 function handleEventAddClassify() {
     $('.successClassify').each((i, classifyName) => {
@@ -748,6 +754,7 @@ function handleEventAddClassify() {
     });
 }
 
+// kết thúc Thêm form phân loại
 
 function tableClassify(value1, value2, hidden1, hidden2, location) {
     return `
@@ -763,34 +770,34 @@ function tableClassify(value1, value2, hidden1, hidden2, location) {
             <td>
                 <input type="text" name="profit"
                     onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                    maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
+                    maxlength="20" class="px-1 rounded-2 inputBorder profit" style="height: 35px; min-width: 150px;">
             </td>
             <td>
                 <input type="text" name="importPrice"
                     onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                    maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
+                    maxlength="20" class="px-1 rounded-2 inputBorder importPrice" style="height: 35px; min-width: 150px;">
             </td>
             <td>
                 <input type="text" name="warehouse"
                     onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                     maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
             </td>
-            <td>
+            <td class="transport">
                 <input type="text" name="weight"
                     onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                     maxlength="20" class="transpotClassify px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
             </td>
-            <td>
+            <td class="transport">
                 <input type="text" name="length"
                     onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                     maxlength="20" class="transpotClassify px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
             </td>
-            <td>
+            <td class="transport">
                 <input type="text" name="width"
                     onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                     maxlength="20" class="transpotClassify px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
             </td>
-            <td>
+            <td class="transport">
                 <input type="text" name="height"
                     onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                     maxlength="20" class="transpotClassify px-1 rounded-2 inputBorder" style="height: 35px; min-width: 150px;">
@@ -804,4 +811,117 @@ function tableClassify(value1, value2, hidden1, hidden2, location) {
 
 
 
+// set value cho từng biến thể
+
+function setValueInputTable() {
+    $('.applyToAll')
+        .off('click')
+        .on('click', () => {
+            loopSetValueInput();
+        });
+}
+
+
+function loopSetValueInput() {
+    $('#addDataTable').find('tr').each((i, input) => {
+        $(input).find('input').each((j, value) => {
+            if (j != 0) {
+                if (j == 2) {
+                    let inputPrice = $(input).find('input').eq(0);
+                    let profit = $(input).find('input').eq(1);
+                    calculator(inputPrice, profit, value);
+                    eventChangeinput(inputPrice, profit, value);
+                    $(value).val($('#inputAll').find('input').eq(j - 1).val()).trigger('valueSet');
+                } else {
+                    $(value).val($('#inputAll').find('input').eq(j - 1).val());
+                }
+            }
+        });
+    });
+}
+
+function calculator(inputPrice, profit, value) {
+    $(value).on('valueSet', function () {
+        let price = Number($(this).val().replace(/\D/g, ""));
+        let profits = Number($(profit).val().replace(/\D/g, ""));
+        $(inputPrice).val(profits + price);
+    });
+}
+
+function eventChangeinput(inputPrice, profit, inputTarget) {
+    $(inputTarget).add(profit)
+        .off('input')
+        .on('input', function () {
+            let price = Number($(inputTarget).val().replace(/\D/g, ""));
+            let profits = Number($(profit).val().replace(/\D/g, ""));
+            value = new Intl.NumberFormat('vi-VN').format($(this).val().replace(/\D/g, ""));
+            $(this).val(value);
+            if(!price == ''){
+                let total = profits + price;
+                $(inputPrice).val(new Intl.NumberFormat('vi-VN').format(total));
+            }else {
+                $(inputPrice).val(0);
+            }
+        });
+}
+
+// kết thúc set value cho từng biến thể
+
+function formSetValueAll() {
+    $('#inputAll').find('input').each((i, val)=> {
+        formatCurrencyInput(val);
+    });
+}
+
+validateInput();
+
+
+function validateInput() {
+    formatCurrencyInput('#importPrice');
+    formatCurrencyInput('#profit');
+    formatCurrencyInput('#warehouse');
+    formatCurrencyInput('#warehouse');
+    formatCurrencyInput('#weight');
+    formatCurrencyInput('#width');
+    formatCurrencyInput('#height');
+}
+
+
+// định dạng input 
+function formatCurrencyInput(input) {
+    $(input).on('input', function () {
+        let value = $(input).val().replace(/\D/g, ""    );
+        if (value) {
+            value = new Intl.NumberFormat('vi-VN').format(value);
+            $(input).val(value);
+        } else {
+            $(input).val("");
+        }
+    });
+}
+
+// kết thúc định dạng input giá
+
+
 // kết thúc thêm phân loại cho sản phẩm
+
+// thêm thông tin vận chuyển
+let bool = false;
+$('#btnToggerTransportClick').on('click', function() {
+    if(!bool){
+        $('#btnToggerTransport')        
+        .animate({ left: '25px' }, 100);
+        bool = true;
+        $(this).addClass('bg-success');
+        $(this).removeClass('bg-danger');
+    }else {
+        $('#btnToggerTransport')
+        .animate({ left: '0px' }, 100);        
+        $(this).removeClass('bg-success');
+        $(this).addClass('bg-danger');
+        bool = false;
+    }
+    
+});
+
+// kết thúc thêm thông tin vận chuyển
