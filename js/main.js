@@ -336,10 +336,14 @@ $('#addClassifyProduct').click(() => {
         $('#addClassify').removeClass('d-none');
         $('#addClassify').append(formClassify(indexClassify));
         $('#tableClassify').removeClass('d-none');
+        $('#addBtnTogger').append(btnTogger());
         if (indexClassify == 1) {
             $('.classification_2').each((i, v) => {
                 $(v).removeClass('d-none');
             })
+        }else {
+            $('#formPrice').empty();
+            btnToggerTransportClick();
         }
         indexClassify++;
         handleDeleteClassify();//gọi hàm xóa biến thể
@@ -358,7 +362,9 @@ $(document).on("click", ".closeFormClassify", function () {
         $('#addClassify').addClass('d-none');
         $('#tableClassify').addClass('d-none');
         $('#formPrice').removeClass('d-none');
+        $('#formPrice').html(formPrice());
         $('.classify_1').text('Phân loại 1');
+        $('#addBtnTogger').children(':nth-child(2)').remove();
         addDataTable.empty();
         arrForm1 = [];
     } else {
@@ -503,6 +509,8 @@ function recursionInput(r) {
                         handleDeleteClassify();//gọi hàm xóa biến thể
                         autoAddInput();// hàm gọi tạo biến thể 
                     }
+                    transport();
+                    renderInputTransport();
                     loopSetValueInput();
                 }
             });
@@ -669,12 +677,12 @@ function formClassify(i) {
     return `
         <div class="row mx-4 mt-5 classifyParent">
             <div class="col-lg-2 col-12 titleClassify">Phân loại ${i + 1}</div>
-            <div class="col-lg-10 col-12">
+            <div class="col-lg-10 col-12 px-0 px-md-auto">
                 <!-- thêm phân loại-->
                 <div class="d-md-flex" id="formClassify${i}">
                     <div class="bg-secondary bg-opacity-10 w-100 rounded-2">
                         <div class="d-flex justify-content-between p-3 border-bottom">
-                            <div class="d-flex align-items-center classifyNameParent">
+                            <div class="d-flex flex-wrap align-items-center classifyNameParent">
                                 <h6 class="me-2 mb-0">Tên phân loại</h6>
                                 <div class="d-flex align-items-center">
                                     <input type="text" name="classifyName${i}" class="classifyName inputBorder rounded-1 px-1">
@@ -693,7 +701,7 @@ function formClassify(i) {
                             <h6 class="me-2 mb-0">Tên biến thể</h6>
                             <div class="row addElement" id="addElement${i}">
                                 <div class="col-lg-6">
-                                    <div class="p-3 d-flex align-items-center addDelete">
+                                    <div class="p-md-3 pt-2 d-flex align-items-center addDelete">
                                         <div class="position-relative w-100">
                                             <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-1 me-1"
                                                 style="font-size: 15px;"><span class="productNameChar">0</span>/60
@@ -716,7 +724,7 @@ function formClassify(i) {
 function inputElementText(i) {
     return `
         <div class="col-lg-6">
-            <div class="p-3 d-flex align-items-center addDelete">
+            <div class="p-md-3 pt-2 d-flex align-items-center addDelete">
                 <div class="position-relative w-100">
                     <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-1 me-1"
                         style="font-size: 15px;"><span class="productNameChar">0</span>/60
@@ -880,7 +888,6 @@ function validateInput() {
     formatCurrencyInput('#importPrice');
     formatCurrencyInput('#profit');
     formatCurrencyInput('#warehouse');
-    formatCurrencyInput('#warehouse');
     formatCurrencyInput('#weight');
     formatCurrencyInput('#width');
     formatCurrencyInput('#height');
@@ -906,22 +913,234 @@ function formatCurrencyInput(input) {
 // kết thúc thêm phân loại cho sản phẩm
 
 // thêm thông tin vận chuyển
+
+addFormTransport();
+
+function addFormTransport() {
+    $('#formPrice').html(formPrice());
+    $('#formTransport').html(formTransport());
+    eventChangeinput('#sellingPrice', '#profit', '#importPrice');
+    validateInput();
+}
+
 let bool = false;
-$('#btnToggerTransportClick').on('click', function() {
+function btnToggerTransportClick() {
+    $('#btnToggerTransportClick').on('click', function() {
+        if(!bool){
+            bool = true;
+            $('#btnToggerTransport')        
+            .animate({ left: '25px' }, 100);
+            $(this).addClass('bg-success');
+            $(this).removeClass('bg-danger');
+            $('.transport').css('display', 'table-cell');
+            transport();
+            $('#formTransport').empty();
+        }else {
+            bool = false;
+            $('#btnToggerTransport')
+            .animate({ left: '0px' }, 100);        
+            $(this).removeClass('bg-success');
+            $(this).addClass('bg-danger');
+            $('.transport').css('display', 'none');
+            transport();
+            $('#formTransport').html(formTransport());
+        }
+    });
+}
+
+function transport() {
     if(!bool){
-        $('#btnToggerTransport')        
-        .animate({ left: '25px' }, 100);
-        bool = true;
-        $(this).addClass('bg-success');
-        $(this).removeClass('bg-danger');
+        addDataTable.find('.transport').find('input').prop('disabled', true);
     }else {
-        $('#btnToggerTransport')
-        .animate({ left: '0px' }, 100);        
-        $(this).removeClass('bg-success');
-        $(this).addClass('bg-danger');
-        bool = false;
+        addDataTable.find('.transport').find('input').prop('disabled', false);
     }
+}
+
+function renderInputTransport() {
+    if(bool){
+        $('.transport').css('display', 'table-cell');
+    }else {
+        $('.transport').css('display', 'none');
+    }
+}
+
+function btnTogger() {
+    return `
+        <div class="bg-danger rounded-pill position-relative" id="btnToggerTransportClick" style="width: 50px;height: 22px; cursor: pointer;">
+            <div class="position-absolute rounded-pill bg-white transition" id="btnToggerTransport" style="width: 25px;height: 22px; "></div>
+        </div>
+    `;
+}
+
+function formPrice() {
+    return `
+        <div class="">
+            <div class="row mx-4 mt-5">
+                <div class="col-lg-2 col-12">Giá nhập<span class="text-danger">*</span></div>
+                <div class="col-lg-10 col-12">
+                    <!-- thêm giá nhập -->
+                    <div class="d-md-flex" id="">
+                        <div class="w-100 ps-2">
+                            <div class="position-relative m-2 m-md-0">
+                                <div class="position-relative setWidthInput">
+                                    <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                        style="font-size: 15px;">đ
+                                    </div>
+                                    <input type="text" name="importPrice" id="importPrice" placeholder="0"
+                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        maxlength="20" class="w-100 inputBorder rounded-2 px-2 setStytleInput">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- kết thúc thêm giá nhập-->
+                </div>
+            </div>
+            <div class="row mx-4 mt-5">
+                <div class="col-lg-2 col-12">Lợi nhận<span class="text-danger">*</span></div>
+                <div class="col-lg-10 col-12">
+                    <!-- thêm giá lợi nhuận -->
+                    <div class="d-md-flex" id="">
+                        <div class="w-100 ps-2">
+                            <div class="position-relative m-2 m-md-0">
+                                <div class="position-relative setWidthInput">
+                                    <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                        style="font-size: 15px;">đ
+                                    </div>
+                                    <input type="text" name="profit" id="profit" class="w-100 inputBorder rounded-2 px-2 setStytleInput"
+                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        maxlength="20" placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- kết thúc thêm lợi nhuận-->
+                </div>
+            </div>
+            <div class="row mx-4 mt-5">
+                <div class="col-lg-2 col-12">Giá bán<span class="text-danger">*</span></div>
+                <div class="col-lg-10 col-12">
+                    <!-- thêm giá bán -->
+                    <div class="d-md-flex" id="">
+                        <div class="w-100 ps-2">
+                            <div class=" m-2 m-md-0">
+                                <div class="position-relative setWidthInput">
+                                    <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                        style="font-size: 15px;">đ
+                                    </div>
+                                    <input type="text" name="sellingPrice" id="sellingPrice" readonly
+                                        class="rounded-2 px-2 border-1 border-secondary w-100 opacity-50 setStytleInput"
+                                        placeholder="0"
+                                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        maxlength="20"
+                                        style=" outline: none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- kết thúc thêm giá bán-->
+                </div>
+            </div>
+            <div class="row mx-4 mt-5">
+                <div class="col-lg-2 col-12">Kho<span class="text-danger">*</span></div>
+                <div class="col-lg-10 col-12">
+                    <!-- thêm số lượng kho -->
+                    <div class="d-md-flex" id="">
+                        <div class="w-100 ps-2">
+                            <div class="m-2 m-md-0">
+                                <input type="text" name="warehouse" id="warehouse"
+                                    class="inputBorder w-100 rounded-2 px-2 setStytleInput setWidthInput" placeholder="0"
+                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                    maxlength="20">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- kết thúc thêm số lượng kho-->
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function formTransport() {
+    return `
+        <div class="">
+            <div class="row mx-4 mt-4">
+                <div class="col-lg-2 col-12">Cân nặng<span class="text-danger">*</span></div>
+                <div class="col-lg-10 col-12">
+                    <div class="d-md-flex ps-2 p" id="">
+                        <div class="w-100">
+                            <div class="position-relative m-2 m-md-0 setWidthInput">
+                                <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                    style="font-size: 15px;">g
+                                </div>
+                                <input type="text" name="weight" id="weight"
+                                    class="transpotClassify w-100 px-1 rounded-2 inputBorder"
+                                    style="height: 35px;" placeholder="Cân nặng (gram)">
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5 mx-4 p-0">
+                <div class="col-lg-2 col-12">Kích thước</div>
+                <div class="col-lg-10 col-12">
+                    <!-- thêm thông tin vận chuyển -->
+                    <div class="ps-2 w-100 d-flex flex-wrap">
+                        <div class="size">
+                            <div class="d-md-flex pb-2" id="">
+                                <div class="position-relative m-2 m-md-0 setWidthInputShip">
+                                    <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                        style="font-size: 15px;">cm
+                                    </div>
+                                    <input type="text" name="length" id="length"
+                                        class="transpotClassify w-100 px-1 rounded-2 inputBorder"
+                                        style="height: 35px;" placeholder="Chiều dài (cm)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pb-2 pt-md-0 px-md-2 px-2 d-flex align-items-center core">
+                            <div class="w-100 fs-4 d-flex justify-content-center align-items-center" id="">
+                                x
+                            </div>
+                        </div>
+                        <div class="size">
+                            <div class="d-md-flex pb-2" id="">
+                                <div class="position-relative m-2 m-md-0 setWidthInputShip">
+                                    <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                        style="font-size: 15px;">cm
+                                    </div>
+                                    <input type="text" name="width" id="width"
+                                        class="transpotClassify w-100 px-1 rounded-2 inputBorder"
+                                        style="height: 35px;" placeholder="Chiều rộng (cm)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pb-2 pt-md-0 px-md-2 d-flex align-items-center core">
+                            <div class="w-100 fs-4 d-flex justify-content-center align-items-center" id="">
+                                x
+                            </div>
+                        </div>
+                        <div class="size">
+                            <div class="d-md-flex pb-2" id="">
+                                <div class="position-relative m-2 m-md-0 setWidthInputShip">
+                                    <div class="border-start position-absolute top-50 end-0 translate-middle-y ps-2 me-2"
+                                        style="font-size: 15px;">cm
+                                    </div>
+                                    <input type="text" name="height" id="height"
+                                        class="transpotClassify w-100 px-1 rounded-2 inputBorder"
+                                        style="height: 35px;" placeholder="Chiều cao (cm)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- kết thúc thêm thông tin vận chuyển-->
+                </div>
+            </div>
+        </div>
     
-});
+    `;
+}
+
 
 // kết thúc thêm thông tin vận chuyển

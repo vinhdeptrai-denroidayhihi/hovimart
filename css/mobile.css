@@ -57,4 +57,8 @@
     .setWidthInputShip{
         max-width: 100% !important;
     }
+
+    .size {
+        width: 100%;
+    }
 }

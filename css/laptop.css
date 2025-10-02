@@ -244,3 +244,11 @@
     height: 35px; 
     padding-right: 50px !important;
 }
+
+.size {
+    width: auto;
+}
+
+.transport {
+    display: none;
+}
