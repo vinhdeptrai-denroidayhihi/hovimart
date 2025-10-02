@@ -158,7 +158,7 @@
     }
 }
 
-#addAndExcel .addInfo, #addAndExcel .addInfo, #addAndExcel .addInfo{
+#addAndExcel .addInfo, #addAndExcel .idData, #addAndExcel .addBrand{
     height: 35px; 
     cursor: pointer; 
     font-size: 15px;
