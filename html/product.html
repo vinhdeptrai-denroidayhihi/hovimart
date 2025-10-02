@@ -345,11 +345,11 @@
             </section>
         </section>
         <!-- form thêm sản phẩm -->
-        <section class="py-2 position-absolute top-0 h-100 transition d-" id="sectionInfo"
+        <section class="py-2 position-absolute h-100 transition d-" id="sectionInfo"
             style="width: calc(100% - 24px); z-index: 99999;">
             <div class="h-100 rounded-2 overflow-auto scroll" style="background-color: #f0ebeb;">
                 <h6 class="fst-italic p-2 fw-medium position-sticky top-0 bg-white z-3">Thêm sản phẩm mới</h6>
-                <form action="" method="post">
+                <form action="" method="post" enctype="multipart/form-data">
                     <div class="bg-white">
                         <div class="p-3 fs-5">Thông tin cơ bản</div>
                         <div class="row mx-4">
@@ -533,8 +533,7 @@
                                                 style="font-size: 15px;"><span class="productNameChar">0</span>/200
                                             </div>
                                             <input type="text" name="productName"
-                                                class="w-100 inputBorder rounded-2 px-2"
-                                                style="height: 35px;">
+                                                class="w-100 inputBorder rounded-2 px-2" style="height: 35px;">
                                         </div>
                                     </div>
                                 </div>
@@ -553,8 +552,7 @@
                                                 style="font-size: 15px;"><span class="productNameChar">0</span>/200
                                             </div>
                                             <input type="text" name="productName"
-                                                class="w-100 inputBorder rounded-2 px-2"
-                                                style="height: 35px;">
+                                                class="w-100 inputBorder rounded-2 px-2" style="height: 35px;">
                                         </div>
                                     </div>
                                 </div>
@@ -625,7 +623,8 @@
                             <div class="col-lg-2 col-12">Phân loại hàng</div>
                             <div class="col-lg-10 col-12">
                                 <!-- thêm giá nhập -->
-                                <div class="d-flex justify-content-center mt-3 mt-md-0 mx-3 mx-md-0 setWidthInput" id="">
+                                <div class="d-flex justify-content-center mt-3 mt-md-0 mx-3 mx-md-0 setWidthInput"
+                                    id="">
                                     <div class="w-100 ms-2 ms-md-0 d-flex justify-content-center align-items-center rounded-pill text-white hoverBtn"
                                         id="addClassifyProduct"
                                         style="background-color: #EB8D2C; height: 35px; cursor: pointer;">
@@ -637,7 +636,7 @@
                         </div>
 
                         <div class="pe-md-5" id="formPrice">
-                            
+
                         </div>
                         <!-- thêm phâm loại hàng -->
 
@@ -667,28 +666,32 @@
                                 </div>
                                 <div class="transport">
                                     <div class="p-2 d-flex justify-content-center">
-                                        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        <input type="text"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                             maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
                                             placeholder="Cân nặng">
                                     </div>
                                 </div>
                                 <div class="transport">
                                     <div class="p-2 d-flex justify-content-center">
-                                        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        <input type="text"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                             maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
                                             placeholder="Dài|L(cm)">
                                     </div>
                                 </div>
                                 <div class="transport">
                                     <div class="p-2 d-flex justify-content-center">
-                                        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        <input type="text"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                             maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
                                             placeholder="Rộng|W(cm)">
                                     </div>
                                 </div>
                                 <div class="transport">
                                     <div class="p-2 d-flex justify-content-center">
-                                        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        <input type="text"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                             maxlength="20" class="px-1 rounded-2 inputBorder" style="height: 35px;"
                                             placeholder="Cao|H(cm)">
                                     </div>
@@ -730,10 +733,19 @@
                     <div class="bg-white mt-3 pb-5 pe-md-5">
                         <div class="p-3 fs-5 pt-4 d-flex align-items-center" id="addBtnTogger">
                             <div class="me-5">Vận chuyển</div>
-                            
+
                         </div>
                         <div class="" id="formTransport">
-                            
+
+                        </div>
+                    </div>
+                    <div class="bg-white mt-3 py-3 py-md-4 pe-md-5 position-sticky start-0 end-0 bottom-0">
+                        <div class="d-flex flex-wrap justify-content-center justify-content-md-end" id="formSubmit">
+                            <div class="m-2 btnSetData_popup px-5 pt-1 pb-1 border border-1 rounded-3 fs-6 text-capitalize text-white" style="background-color: rgba(153, 153, 153, .7); cursor: pointer;">Hủy</div>
+                            <div class="m-2 btnSetData_popup px-5 pt-1 pb-1 border border-1 rounded-3 fs-6 text-capitalize text-white" style="background-color: rgba(153, 153, 153, .8); cursor: pointer;">Ẩn</div>
+                            <button type="submit"
+                                class="m-2 btnSetData_popup px-5 pt-1 pb-1 border border-1 rounded-3 fs-6 text-capitalize text-white" style="background-color: var(--main-color); cursor: pointer;">Cập
+                                nhật</button>
                         </div>
                     </div>
                 </form>
